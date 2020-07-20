@@ -1,0 +1,72 @@
+@import "../style/variables.scss";
+
+*{
+	font-family: 'Roboto', sans-serif;
+	-webkit-font-smoothing: antialiased;
+}
+
+html, body, app {
+	height:100%;
+}
+
+.background-logo{
+	background-color: white;
+	background-image: url("/fw_background.png");
+}
+
+.btn.btn-fw{
+	background-color:$btn-color;
+	color: $btn-text-color;;
+	&:hover{
+		background-color: $btn-hover-color;
+	}
+}
+
+.block-title {
+	margin-bottom: 20px;
+}
+.block-title h1 {
+	font-size: 24px;
+	font-weight: 400 !important;
+}
+
+.block-subtitle h2{
+	font-size: 20px;
+	font-weight: 300 !important;
+}
+
+.welcome{
+	border-bottom: 5px solid $color;
+}
+
+.fwinput {
+	padding: 0.75rem 1rem;
+	font-size: 1rem;
+	line-height: 1.15;
+	color: $input-text-color;
+	background-color: $input-background-color;
+	border: 0px solid $input-border-color;
+	border-radius: 0.25rem;
+	transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
+.card-shadow{
+	border-radius: 10px;
+	box-shadow: 0 5px 10px 0 rgba(0, 0, 0, 0.1);
+	-moz-box-shadow: 0 5px 10px 0 rgba(0, 0, 0, 0.1);
+	-webkit-box-shadow: 0 5px 10px 0 rgba(0, 0, 0, 0.1);
+	-o-box-shadow: 0 5px 10px 0 rgba(0, 0, 0, 0.1);
+	-ms-box-shadow: 0 5px 10px 0 rgba(0, 0, 0, 0.1);
+}
+.breadcrumb{
+	background-color:$breadcrumb-background-color;
+}
+
+.table .thead-light th {
+    background-color: $table-head-background-color;
+	border:none;
+}
+
+.table-hover tbody tr:hover {
+    background-color: $table-hover-color;
+}

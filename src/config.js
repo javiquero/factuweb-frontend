@@ -1,4 +1,4 @@
-const apiUrl = 'http://localhost:1337'
+const apiUrl = 'http://factuapi:1337'
 const LOCAL_URL = 'http://localhost:5000'
 const REMOTE_URL = 'https://www.mydomain.com'
 const siteName = "factuWeb"

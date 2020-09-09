@@ -50,7 +50,7 @@
 				<div class="dropdown-menu dropdown-menu-right" style="position: absolute;" aria-labelledby="navbarDropdown">
 					<a class="dropdown-item" href="/private/account/">Ir a mi cuenta</a>
 					<div class="dropdown-divider"></div>
-					<a class="dropdown-item" href="/private/account/favorites">Mis artículos favoritos</a>
+					<a class="dropdown-item" href="/private/account/items">Mis artículos</a>
 					<a class="dropdown-item" href="/private/account/invoices">Mis facturas</a>
 					<a class="dropdown-item" href="/private/account/orders">Mis pedidos</a>
 					<div class="dropdown-divider"></div>

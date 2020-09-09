@@ -36,7 +36,7 @@
 							</div>
 						</div>
 						<div class="row">
-							<div class="col-lg-6 pl-2 pr-1">
+							<div class="col-xl-8 col-lg-6 pl-2 pr-1">
 							<div class="thumb-image media text-center">
 										<img
 										src="/api/image/1024/{fart.CODART}"
@@ -52,12 +52,12 @@
 									class="align-self-center mr-3" /> --
 								</div> -->
 								<div>
-									<button class="btn btn-light btn-sm" type="button" >
+									<a href="/api/image/download/photo/{fart.CODART}" class="btn btn-light btn-sm"  role="button" >
 										Descargar imagen
-									</button>
+									</a>
 								</div>
 							</div>
-							<div class="col-lg-6 pl-2 pr-2 ">
+							<div class="col-xl-4 col-lg-6 pl-2 pr-2 ">
 								<div class="row">
 									<div class="col packing">
 										<div style="border-bottom:1px solid #ccc; margin-bottom:5px;">

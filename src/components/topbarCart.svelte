@@ -1,14 +1,21 @@
 <!-- <main> -->
 	<li class="nav-item dropdown topbarcart " class:active="{visible === true}">
-		<a class="nav-link dropdown-toggle" href="null" id="cartnavbarDropdown" role="button" data-toggle="dropdown"
+		{#if $cart.items.length>0}
+		<a class="nav-link dropdown-toggle" href="{null}" id="cartnavbarDropdown" role="button" data-toggle="dropdown"
 			aria-haspopup="true" aria-expanded="false">
 			<i style="font-size: 23px; padding-top:3px;" class="fal fa-shopping-basket"></i>
 			<span class="badge badge-success">{$cart.items.length}</span>
 		</a>
+		{:else}
+		<a class="nav-link dropdown-toggle" href="{null}" id="cartnavbarDropdown" >
+			<i style="font-size: 23px; padding-top:3px;" class="fal fa-shopping-basket"></i>
+			<span class="badge badge-success">{$cart.items.length}</span>
+		</a>
+		{/if}
 		<div class="dropdown-menu dropdown-menu-right"  style="position: absolute;padding:0px;" aria-labelledby="cartnavbarDropdown">
-			<div class="dropdown-menu-title" >
+			<a href="/private/cart" class="dropdown-menu-title" >
 				Ver el carro - {formatCurrency(total)}
-			</div>
+			</a>
 			<div style="height: 300px; overflow-y: scroll;">
 				<ul style="padding:5px 10px;">
 					{#each $cart.items.reverse().slice(0, 50) as item }
@@ -72,9 +79,9 @@ $: calcTotal($cart)
 
 function calcTotal(c){
 	total = 0;
-	if (c==undefined) return ;
+	if (c==undefined) return;
 	c.items.forEach(element => {
-		total += element.qty * (element.PCOART-((element.PCOART/100)*element.DFIART));
+		total += parseFloat(element.qty) * (parseFloat(element.price.clientPrice));
 	});
 	// return formatCurrency(total);
 }
@@ -147,6 +154,8 @@ function removeCart (){
 				 transition: all 0.5s;
 				position: relative;
 				text-align: center;
+				width: 100%;
+    			display: inline-block;
 				&:hover{
 					background-color: #FF2300;
 					.dropdown-toggle {color:white;}

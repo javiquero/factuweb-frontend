@@ -8,33 +8,35 @@
 <!-- // End SAPPER preLoad Section -->
 
 <script>
-	import Pretable from "./../../../../components/preTable.svelte";
-	import Pretext from "./../../../../components/preText.svelte";
-	import DetailsItem from "./../../../../components/detailsItem.svelte";
-	import AddCart from "./../../../../components/addCart.svelte";
-	import { siteName, contactEmail } from "./../../../../config";
+	import Pretable from "@/components/preTable.svelte";
+	import Pretext from "@/components/preText.svelte";
+	import ModalDetails from "@/components/modalDetails.svelte";
 
-	import { formatDate, formatCurrency} from "./../../../../lib/functions";
-	import { get } from "../../../../lib/api";
+	// import AddCart from "@/components/addCart.svelte";
+	import { siteName, contactEmail } from "@/config";
+	import { formatDate, formatCurrency} from "@/lib/functions";
+	import { get } from "@/lib/api";
 	import { stores } from "@sapper/app";
 	const { session} = stores();
 
 	let order = [];
+	let items = [];
 	export let title = "Detalle de pedido";
 	export let numOrder=undefined;
 
-	let selART = undefined;
+	let lineSelected = undefined;
 	function onSelectLine(line){
 		if (line.info.CODART && line.info.IMGART ){
-			selART= line.info;
-			window.$('#modalItemDetails').modal('show');
+			lineSelected = line.info;
 		}
 	}
 
 	function getOrder() {
 			return new Promise(async (resolve, reject) => {
 			try {
-				let o = await get(`fpcl/${numOrder}`,"",$session.token);;
+				let o = await get(`fpcl/${numOrder}`,"",$session.token);
+				items = [];
+				await Promise.all(o.lines.map(item => {if (item.info) item.info.idx=item.POSLPC; if (item.info.CODART && item.info.IMGART ) items.push(item.info)}))
 				return resolve (order = o);
 			} catch (e) {
 				console.error("Order - ", e);
@@ -42,7 +44,6 @@
 			}
 		});
 	}
-
 
 </script>
 
@@ -59,9 +60,6 @@
 				<li class="breadcrumb-item active" aria-current="page">Pedido</li>
 			</ol>
 		</nav>
-
-
-
 		{#await getOrder()}
 			<div class="row">
 				<div class="col-6 ">
@@ -93,9 +91,9 @@
 				</div>
 				<div class="col-6 text-right">
 					<div class="" style="max-width:220px; width:220px; float:right;">
-						<button class="btn btn-fw btn-light btn-block" disabled type="button" >
+						<a href="{null}" class="btn btn-fw btn-light btn-block" role="button" >
 							Descargar imagenes <i style="float: right; line-height: 22px;" class="fal fa-images"></i>
-						</button>
+						</a>
 						<button class="btn btn-fw btn-light btn-block" disabled type="button" >
 							Añadir todo al carro <i style="float: right; line-height: 22px;" class="fal fa-shopping-basket"></i>
 						</button>
@@ -121,7 +119,7 @@
 				<tbody>
 					{#if order.lines}
 						{#each order.lines as line}
-							<tr style="" on:click={()=>onSelectLine(line)}>
+							<tr style="" on:click={()=>{onSelectLine(line)}}>
 								<td style="min-width:100px; width:100px;padding:5px;">
 									<div class="thumb-image media text-center">
 									{#if line.ARTLPC && line.CANLPC}
@@ -155,6 +153,7 @@
 					{/if}
 				</tbody>
 			</table>
+			<ModalDetails items="{items}" selected="{lineSelected}"></ModalDetails>
 		{:catch error}
 			<div class="alert alert-danger" role="alert">
 					<h4 class="alert-heading">Error al recibir información!</h4>
@@ -163,20 +162,6 @@
 				<p class="mb-0">Recargue la página y si el problema persiste contacte con {contactEmail}.</p>
 			</div>
 		{/await}
-
-		<div class="modal fade" id="modalItemDetails" tabindex="-1" role="dialog">
-			<div class="modal-dialog modal-dialog-centered modal-xl" role="document">
-				<div class="modal-content">
-					<div class="modal-body">
-						<button on:click={()=>{window.$('#modalItemDetails').modal('hide');}} type="button" class="close" data-dismiss="modal" aria-label="Close">
-							<span aria-hidden="true">&times;</span>
-						</button>
-						<DetailsItem fart={selART} />
-					</div>
-				</div>
-			</div>
-		</div>
-
 	</section>
 </main>
 

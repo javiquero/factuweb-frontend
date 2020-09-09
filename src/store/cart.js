@@ -18,8 +18,8 @@ function getCart() {
 
 		set: async (payload) => {
             try {
-                const data = await post("cart/set", payload);
-				set(data)
+				const data = await post("cart/set", payload);
+				set(data);
                 return data
             }
             catch (e) {
@@ -36,14 +36,14 @@ function getCart() {
                 throw e
             }
 		},
-		total: () => {
-			let total = 0;
-			let g = get();
-			console.log(g);
-			console.log(items);
-			return total;
+		// total: () => {
+		// 	let total = 0;
+		// 	let g = get();
+		// 	console.log(g);
+		// 	console.log(items);
+		// 	return total;
 
-		}
+		// }
     }
 }
 export const cart = getCart()

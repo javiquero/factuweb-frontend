@@ -35,6 +35,7 @@ async function send({ method, path, data, token, cookie }) {
 		// }
 
 		try {
+			// console.log(`${Url}/api/${path}`);
 			let response = await fetch(`${Url}/api/${path}`, opts)
 
 			if (response.status == 403) {

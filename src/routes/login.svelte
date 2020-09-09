@@ -60,7 +60,7 @@
 						<div class="body-login">
 							<form on:submit|preventDefault={submit}>
 								<div class="form-group">
-									<label for="inputCodig">Código de cliente</label>
+									<label for="inputCodig">Códigos de cliente</label>
 									<input use:init  disabled={loading} bind:value={clientcode} type="text"
 										placeholder="" name="clientcode" class="form-control fwinput" id="inputCodig"
 										aria-describedby="inputCodigo">

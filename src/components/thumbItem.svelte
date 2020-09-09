@@ -1,5 +1,5 @@
 <script>
-	export let fart = {}
+	// export let fart = {}
 	export let CODART = ''
 
 	import AddCart from "./addCart.svelte";
@@ -7,41 +7,48 @@
 
 	import { createEventDispatcher } from 'svelte';
 	const dispatch = createEventDispatcher();
-	import { cart } from "./../store/cart.js";
+
+	import { fart } from "@/store/fart.js";
+	import { cart } from "@/store/cart.js";
 
 	import { stores } from "@sapper/app"
 	const { session } = stores()
 
 
+	let item = {};
 
  	let qty = 0
 	let inCart = false;
-  	$:product = getProduct(fart)
+  	$:product = getProduct(CODART)
+	$:inCart = isInCart($cart, item)
 
-	$:inCart = isInCart($cart)
-	function isInCart(x){
-
-		let found = x.items.find(element => element.CODART == fart.CODART);
+	function isInCart(x,i){
+		let found = x.items.find(element => element.CODART == i.CODART);
 		if (!found ) return false;
 		return true;
 	}
 	function onSelect(){
-		 dispatch('select', fart);
+		 dispatch('select', item);
 	}
 
-	async function getProduct() {
+	async function getProduct(value) {
 		return new Promise(async (resolve, reject) =>{
-			if (fart != {} && fart != undefined) return resolve (fart);
+			item = await fart.getCode(value);
+			return resolve(item);
+		})
+		// return new Promise(async (resolve, reject) =>{
+		// 	// if (fart != {} && fart != undefined) return resolve (fart);
+		// 	if (Object.keys(fart).length > 0 && fart.constructor === Object) return resolve (fart);
 
-			try {
-				data = await get(`fart/${CODART}"`,"",$session.token);
-				if (data && data.length > 0) response = data[0]
-				return resolve (data);
-			} catch (e) {
-				console.error("Load section - ", e);
-				return reject (e)
-			}
-		});
+		// 	// try {
+		// 	// 	data = await get(`fart/${CODART}"`,"",$session.token);
+		// 	// 	if (data && data.length > 0) response = data[0]
+		// 	// 	return resolve (data);
+		// 	// } catch (e) {
+		// 	// 	console.error("Load section - ", e);
+		// 	// 	return reject (e)
+		// 	// }
+		// });
 	}
 
   let showCant = false
@@ -49,7 +56,6 @@
     showCant = !showCant
   }
 </script>
-
 
 <div class="fw-thumb-product">
 	<div class="card">

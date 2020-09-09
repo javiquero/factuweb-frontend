@@ -1,0 +1,21 @@
+version: '3.5'
+services:
+    frontend:
+        container_name: DEV_factuweb_frontend_1
+        hostname: factuweb_frontend
+        build:
+            context: .
+            dockerfile: Dockerfile
+        restart: always
+        volumes:
+            - .:/app/factuweb-frontend:rw
+        ports:
+            - "80:5000"
+        networks:
+            net:
+                aliases:
+                    - factuweb
+networks:
+    net:
+        name: factuweb_net
+        driver: bridge

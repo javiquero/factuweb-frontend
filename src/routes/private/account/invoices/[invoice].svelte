@@ -10,9 +10,10 @@
 <script>
 	import Pretable from "./../../../../components/preTable.svelte";
 	import Pretext from "./../../../../components/preText.svelte";
-	import DetailsItem from "./../../../../components/detailsItem.svelte";
-	import AddCart from "./../../../../components/addCart.svelte";
+	// import DetailsItem from "./../../../../components/detailsItem.svelte";
+	// import AddCart from "./../../../../components/addCart.svelte";
 	import { siteName, contactEmail } from "./../../../../config";
+	import ModalDetails from "@/components/modalDetails.svelte";
 
 	import { formatDate, formatCurrency} from "./../../../../lib/functions";
 	import { get } from "../../../../lib/api";
@@ -20,21 +21,23 @@
 	const { session} = stores();
 
 	let invoice = [];
+	let items = [];
 	export let title = "Detalle de factura";
 	export let numInvoice=undefined;
 
-	let selART = undefined;
+	let lineSelected = undefined;
 	function onSelectLine(line){
 		if (line.info.CODART && line.info.IMGART ){
-			selART= line.info;
-			window.$('#modalItemDetails').modal('show');
+			lineSelected= line.info;
 		}
 	}
 
 	function getInvoice() {
 			return new Promise(async (resolve, reject) => {
 			try {
-				let o = await get(`ffac/${numInvoice}`,"",$session.token);;
+				let o = await get(`ffac/${numInvoice}`,"",$session.token);
+				items = [];
+				await Promise.all(o.lines.map(item => {if (item.info) item.info.idx=item.POSLFA; if (item.info.CODART && item.info.IMGART ) items.push(item.info)}))
 				return resolve (invoice = o);
 			} catch (e) {
 				console.error("Invoice - ", e);
@@ -150,6 +153,7 @@
 					{/if}
 				</tbody>
 			</table>
+			<ModalDetails items="{items}" selected="{lineSelected}"></ModalDetails>
 		{:catch error}
 			<div class="alert alert-danger" role="alert">
 					<h4 class="alert-heading">Error al recibir información!</h4>
@@ -158,20 +162,6 @@
 				<p class="mb-0">Recargue la página y si el problema persiste contacte con {contactEmail}.</p>
 			</div>
 		{/await}
-
-		<div class="modal fade" id="modalItemDetails" tabindex="-1" role="dialog">
-			<div class="modal-dialog modal-dialog-centered modal-xl" role="document">
-				<div class="modal-content">
-					<div class="modal-body">
-						<button on:click={()=>{window.$('#modalItemDetails').modal('hide');}} type="button" class="close" data-dismiss="modal" aria-label="Close">
-							<span aria-hidden="true">&times;</span>
-						</button>
-						<DetailsItem fart={selART} />
-					</div>
-				</div>
-			</div>
-		</div>
-
 	</section>
 </main>
 

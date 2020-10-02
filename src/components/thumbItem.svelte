@@ -1,14 +1,11 @@
 <script>
-	// export let fart = {}
-	export let CODART = ''
+ 	export let fart = {}
 
 	import AddCart from "./addCart.svelte";
 	import { formatCurrency } from './../lib/functions'
 
 	import { createEventDispatcher } from 'svelte';
 	const dispatch = createEventDispatcher();
-
-	import { fart } from "@/store/fart.js";
 	import { cart } from "@/store/cart.js";
 
 	import { stores } from "@sapper/app"
@@ -19,36 +16,37 @@
 
  	let qty = 0
 	let inCart = false;
-  	$:product = getProduct(CODART)
-	$:inCart = isInCart($cart, item)
 
-	function isInCart(x,i){
+  	$:product = getProduct()
+	$:inCart = isInCart($cart, fart)
+
+	function isInCart(x, i){
 		let found = x.items.find(element => element.CODART == i.CODART);
 		if (!found ) return false;
 		return true;
 	}
 	function onSelect(){
-		 dispatch('select', item);
+		 dispatch('select', fart);
 	}
 
 	async function getProduct(value) {
-		return new Promise(async (resolve, reject) =>{
-			item = await fart.getCode(value);
-			return resolve(item);
-		})
 		// return new Promise(async (resolve, reject) =>{
-		// 	// if (fart != {} && fart != undefined) return resolve (fart);
-		// 	if (Object.keys(fart).length > 0 && fart.constructor === Object) return resolve (fart);
+		// 	item = await fart.getCode(value);
+		// 	return resolve(item);
+		// })
+		return new Promise(async (resolve, reject) =>{
+			// if (fart != {} && fart != undefined) return resolve (fart);
+			if (Object.keys(fart).length > 0 && fart.constructor === Object) return resolve (fart);
 
-		// 	// try {
-		// 	// 	data = await get(`fart/${CODART}"`,"",$session.token);
-		// 	// 	if (data && data.length > 0) response = data[0]
-		// 	// 	return resolve (data);
-		// 	// } catch (e) {
-		// 	// 	console.error("Load section - ", e);
-		// 	// 	return reject (e)
-		// 	// }
-		// });
+			// try {
+			// 	data = await get(`fart/${CODART}"`,"",$session.token);
+			// 	if (data && data.length > 0) response = data[0]
+			// 	return resolve (data);
+			// } catch (e) {
+			// 	console.error("Load section - ", e);
+			// 	return reject (e)
+			// }
+		});
 	}
 
   let showCant = false

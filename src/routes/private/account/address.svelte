@@ -57,12 +57,10 @@
 	</div>
 </div>
 
-
-
 <script>
-	import Precard from "../../../components/preCard.svelte";
-	import { get } from "./../../../lib/api";
-	import { formatDate, formatCurrency} from "./../../../lib/functions";
+	import Precard from "@/components/preCard.svelte";
+	import { get } from "@/lib/api";
+	import { formatDate, formatCurrency} from "@/lib/functions";
 	import { stores } from "@sapper/app";
 	const { session} = stores();
 
@@ -71,12 +69,9 @@
 	async function getAddress() {
 		return new Promise(async (resolve, reject) => {
 			try {
-				let c = await get(`fcli`,undefined ,$session.token);
+				let c = await get(`client/addresses`,undefined ,$session.token);
 				if (!c || c.length<1) return reject(new Error('Imposible recuperar información del cliente.'));
-				c= c[0];
-				c.address = await get( `fobr?sort=CODOBR`,undefined ,$session.token );
-				console.log(JSON.stringify(c.address));
-				return resolve(info = c);
+								return resolve(info = c);
 			} catch (e) {
 				return reject(e);
 			}

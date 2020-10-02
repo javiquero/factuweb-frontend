@@ -23,7 +23,7 @@
 						</h3>
 					{:else}
 						<div class="row">
-							<div class="col pl-2 pr-2 " style="font-size:18px; height: 30px; overflow-y: hidden">
+							<div class="col pl-2 pr-2 " style="font-size:18px; height: 30px; overflow-y: hidden;padding-left: -0px!important;">
 								<div class="description">
 									{fart.DESART}
 								</div>
@@ -41,7 +41,7 @@
 										<img
 										src="/api/image/1024/{fart.CODART}"
 										alt="Imagen de la referéncia {fart.CODART}"
-										style="width:90%;"
+										style="width:100%;"
 										class="align-self-center mr-0" />
 									</div>
 								<!-- <div class="thumb-image media text-center " style="background-image: url('/api/image/1024/{fart.CODART}'); background-size: cover;    background-size: contain;    background-repeat: no-repeat;    background-position: center;">
@@ -51,7 +51,7 @@
 									style="width:90%;"
 									class="align-self-center mr-3" /> --
 								</div> -->
-								<div>
+								<div style="position: absolute;bottom: 0px;">
 									<a href="/api/image/download/photo/{fart.CODART}" class="btn btn-light btn-sm"  role="button" >
 										Descargar imagen
 									</a>
@@ -81,7 +81,7 @@
 
 											{#if fart.price && fart.price.dto > 0}
 												<div class="price brut">
-													Precio bruto:
+													Bruto:
 													<span class="bold">{formatCurrency(fart.price.price)}</span>
 												</div>
 													<div class="price remise">

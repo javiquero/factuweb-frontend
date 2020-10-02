@@ -9,15 +9,12 @@
 	const { session} = stores();
 
 	let info = {};
-	let infoCLient = {};
 
 	async function getAgent() {
 		return new Promise(async (resolve, reject) => {
 			try {
-				let c = await get(`fcli`,undefined ,$session.token);
-				if (c && c.length>0) c= c[0];
-				let a = await get(`fage`,undefined ,$session.token);
-				return resolve(info = a, infoCLient= c);
+				info = await get(`client/agent`,undefined ,$session.token);
+				return resolve(info);
 			} catch (e) {
 				return reject(e);
 			}
@@ -29,14 +26,13 @@
 
 
 <div class="agent-section mt-3">
-	<div class="row justify-content-lg-center">
+	<div class="row justify-content-md-center">
 		{#await getAgent()}
-			<div class="col col-lg-8 col-xl-6 col-md-12">
+			<div class="col-lg-9 col-xl-9 col-md-8 col-sm-12">
 				<Precard  />
 			</div>
 		{:then info}
-			<div class="col col-lg-8 col-xl-6 col-md-12">
-
+			<div class="col-lg-9 col-xl-9 col-md-8 col-sm-12">
 				<div class="card">
 					<div class="card-header">Agente asignado</div>
 					<div class="card-body">
@@ -48,15 +44,14 @@
 								<span style="font-weight:bold;">{siteName}</span>
 								<hr>
 								<div class=" text-responsive" >
-									<div>{info.NOMAGE||''}</div>
-									<div> {info.TEMAGE? 'Tel.' + info.TEMAGE:''}</div>
-									<div>{info.EMAAGE||''} </div>
+									<div>{info.agent.NOMAGE||''}</div>
+									<div> {info.agent.TEMAGE? 'Tel.' + info.agent.TEMAGE:''}</div>
+									<div>{info.agent.EMAAGE||''} </div>
 								</div>
 							</div>
 						</div>
 					</div>
 				</div>
-
 			</div>
 		{:catch error}
 			<div class="alert alert-danger" role="alert">
@@ -69,14 +64,14 @@
 	</div>
 		{#if info}
 			<div class="row mt-5">
-				<div class="col-12 col-lg-6">
+				<div class="col-12 col-md-6">
 					<div class="form-group">
 						<label for="exampleInputEmail1">Dirección de email de respuesta</label>
-						<input type="email" class="form-control" value={infoCLient.EMACLI||''} >
+						<input type="email" class="form-control" value={info.EMACLI||''} >
 						<small class="form-text text-muted">La dirección en la que quieres recibir la respuesta de tu agente.</small>
 					</div>
 				</div>
-				<div class="col-12 col-lg-6">
+				<div class="col-12 col-md-6">
 					<div class="form-group">
 						<label for="exampleInputEmail1">Asunto</label>
 						<input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
@@ -107,6 +102,9 @@
 </div>
 
 <style lang="scss">
-	// @import "@/style/fw.scss";
+	@media (max-width: 996px) {
+		.text-responsive{font-size: 20px;}
+	}
+
 </style>
 

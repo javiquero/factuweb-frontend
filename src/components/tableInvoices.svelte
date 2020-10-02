@@ -1,6 +1,6 @@
 <script>
 	import Pretable from "./preTable.svelte";
-	import { get } from "./../lib/api";
+	import { get } from "@/lib/api";
 	import { formatDate, formatCurrency} from "./../lib/functions";
 	import { contactEmail } from "../config";
 	import { stores, goto } from "@sapper/app";
@@ -11,18 +11,18 @@
 	export let title = "Facturas";
 
 	function onSelectLine(o){
-		goto("/private/account/invoices/" + o.id);
+		goto("/private/account/invoices/" + o.YEAR + "-" + o.TIPFAC + "-" + o.CODFAC);
 	}
 
 	function getInvoices() {
 		return new Promise(async (resolve, reject) => {
 			try {
-				let q = `ffac`;
-				if (max!=undefined) q+="?limit=" + max;
-				let o = await get(q, undefined ,$session.token);
+				if (max==undefined) max=100000;
+				let o = await get("invoices/list/"+max, undefined ,$session.token);
+ 				// console.log(o);
 				return resolve (invoices = o);
 			} catch (e) {
-				console.error("Orders - ", e);
+				console.error("Invoices - ", e);
 				return reject (e)
 			}
 		});
@@ -55,7 +55,7 @@
 	{#await getInvoices()}
 		<Pretable cols="5" rows="{!max?6:4}" />
 	{:then invoices}
-		<table class="table fadeIn animate table-hover">
+		<table class="table fadeIn table-responsivee animate table-hover">
 		<thead  class="thead-light">
 		<tr>
 		<th scope="col"></th>
@@ -80,7 +80,7 @@
 				{:else}
 					{#each invoices as o}
 						<tr on:click={()=>onSelectLine(o)}>
-							<td><a href="/private/account/invoices/{o.id}"> <i class="fa fa-search" aria-hidden="true"></i></a></td>
+							<td><a href="/private/account/invoices/{o.YEAR}-{o.TIPFAC}-{o.CODFAC}"> <i class="fa fa-search" aria-hidden="true"></i></a></td>
 							<td>{o.TIPFAC}-{o.CODFAC}</td>
 							<td>{formatDate(o.FECFAC)}</td>
 							<td>

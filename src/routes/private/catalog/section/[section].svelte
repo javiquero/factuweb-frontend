@@ -1,101 +1,92 @@
 <!-- // SAPPER preLoad Section -->
 	<script context="module">
-		import { get } from "../../../../lib/api";
 		export async function preload(page, session, query) {
 			const { section } = page.params;
 			return {idSection: section}
-
-			// let dataProducts = [];
-			// let dataSection = {};
-			// try {
-			// 	dataSection = await get(`ffam?where={"CODFAM":"${section}"}`,"",session.token);
-			// 	dataProducts = await get(`fart?where={"FAMART":"${section}", "SUWART": 1, "DSCART":0}&limit=1000`,"",session.token);
-			// } catch (e) {
-			// 	console.error(e);
-			// 	this.error(500, e.toString());
-			// }
-			// await new Promise(resolve => setTimeout(resolve, 20000));
-			// return {
-			// 	dataProducts, sectionInfo: dataSection.length>0?dataSection[0]:{}
-			// };
 		}
 	</script>
-<!-- // End SAPPER preLoad Section -->
 
 <script>
 	import ThumbItem from "@/components/thumbItem.svelte";
 	import PreThumbItem from "@/components/preThumbItem.svelte";
 	import PreText from "@/components/preText.svelte";
-	import DetailsItem from "@/components/detailsItem.svelte";
-	import AddCart from "@/components/addCart.svelte";
-
+	import ModalDetails from "@/components/modalDetails.svelte";
 	import { siteName, contactEmail } from "@/config";
-	// import { onMount } from 'svelte';
 	import { stores } from "@sapper/app"
+	import { get } from "@/lib/api";
+	import { onMount } from 'svelte';
+
 	const { session } = stores()
 
 	export let idSection = 0;
+	let remoteData= undefined;
+	$:remoteData = getRemoteData(idSection)
+	let inf=undefined;
 
-	$:refresh(idSection)
-
-	async function refresh(id){
-		items =  getItemsInSection();
-		infoSection =  getInfoSection();
-	};
-
-	let selART = undefined;
+	function getRemoteData(id){
+		if (id == undefined ) id = idSection;
+		return new Promise(async (resolve, reject) =>{
+			try {
+				let items = await get(`catalog/${id}`,"",$session.token);
+				inf = items;
+				return resolve(items);
+			} catch (error) {
+				console.error(error);
+				return reject(error);
+			}
+		});
+	}
+	let selectedProduct = undefined;
 	function onSelectThumb(event){
-		selART= event.detail;
-		window.$('#modalItemDetails').modal('show');
+		selectedProduct= event.detail;
+		console.log(event);
 	}
 
-	// onMount(async () => {
-
-	// });
-	//  var items = [];
-	let items = getItemsInSection()
-	function getItemsInSection(){
-		return new Promise(async (resolve, reject) => {
-			try {
-				items = await get(`fart?where={"FAMART":"${idSection}", "SUWART": 1, "DSCART":0}&limit=1000&sort=ORDART`,"",$session.token);
-				return resolve (items);
-			} catch (e) {
-				console.error("Load items in section - ", e);
-				return reject (e)
-			}
-		});
-	}
-
-	 let infoSection = getInfoSection();
-	function getInfoSection(){
-		return new Promise(async (resolve, reject) => {
-			try {
-				infoSection = await get(`ffam?where={"CODFAM":"${idSection}"}`,"",$session.token);
-				if (infoSection && infoSection.length>0)infoSection=infoSection[0];
-				return resolve (infoSection);
-			} catch (e) {
-				console.error("Load section - ", e);
-				return reject (e)
-			}
-		});
-	}
+	onMount(async () => {
+		window.onscroll=function () {
+			var top = window.pageXOffset ? window.pageXOffset : document.documentElement.scrollTop ? document.documentElement.scrollTop : document.body.scrollTop;
+			var head = document.getElementById("sectionarrows");
+			if (head == null) return;
+				if(top > 61){
+				head.classList.add("arrowsfixed");
+				// head.style.position = "fixed";
+				// head.style.width="100%";
+				// head.style.top="62px";
+				// head.style['z-index']=1;
+			} else {
+				head.classList.remove("arrowsfixed");
+			// if(head.getAttribute("style"))
+				// head.removeAttribute("style")
+		  }
+		};
+	});
 
 </script>
 
+
+<style >
+ :global(.arrowsfixed) {
+		position: sticky;
+		/* width:100%; */
+		top:62px;
+		z-index: 1;
+	}
+	@media (max-width: 770px) {
+		 :global(.arrowsfixed) {top:111px;}
+	}
+
+</style>
+
+
+
 <svelte:head>
-  <title>{siteName} - {infoSection?infoSection.DESFAM:''}</title>
+  <title>{siteName} - {inf?inf.DESFAM:''}</title>
 </svelte:head>
-
 <main>
-
-
 	<section class="items-section">
 	<!-- <div class="container-fluid"> -->
-
-
 		<div class="container-xl">
-
-			{#await infoSection}
+			{#await remoteData}
 				<div class="row">
 						<div class="col mb-3">
 							<PreText></PreText>
@@ -104,37 +95,44 @@
 						<PreText></PreText>
 					</div>
 				</div>
-			{:then infoSection}
-					<div class="row">
-						<div class="col mb-3">
-							<h1>{infoSection.DESFAM}</h1>
+
+				<div class="row">
+					{#each Array(9) as _, i}
+						<div class="col-xs-12 col-sm-6 col-lg-4 col-xl-4"><PreThumbItem /></div>
+					{/each}
+				</div>
+			{:then sectionData}
+					<!-- <div class="row w-100 d-none d-xl-flex" style="position:fixed; left:10px; z-index: 1">
+						<div class="col-6">
+							<a class="btn btn-light" href="/private/catalog/section/{sectionData.inf.previous}" role="button"><i class="fas fa-chevron-left"></i></a>
 						</div>
-						<div class="col text-right">
+						<div class="col-6 text-right">
+							<a class="btn btn-light" href="/private/catalog/section/{sectionData.inf.next}" role="button"><i class="fas fa-chevron-right"></i></a>
+						</div>
+					</div>
+					<div id="sectionarrows" class="row d-flex d-xl-none justify-content-between mb-4" > -->
+					<div id="sectionarrows" class="row justify-content-between mb-4" >
+						<div class="col-3">
+							<a class="btn btn-light btn-block" href="/private/catalog/section/{sectionData.inf.previous}" role="button"><i class="fas fa-chevron-left"></i></a>
+						</div>
+						<div class="col-3">
+							<a class="btn btn-light btn-block" href="/private/catalog/section/{sectionData.inf.next}" role="button"><i class="fas fa-chevron-right"></i></a>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-8 mb-3">
+							<h1>{sectionData.DESFAM}</h1>
+						</div>
+						<div class="col-4 text-right">
 							<div class="dropdown">
-								<button class="btn btn-light btn-sm" type="button" >
+								<a href="/api/image/download/section/{sectionData.CODFAM}" download class="btn btn-light btn-sm" role="button" >
 									Descargar imagenes
-								</button>
+								</a>
 							</div>
 						</div>
 					</div>
-			{:catch error}
-				<div class="alert alert-danger" role="alert">
-						<h4 class="alert-heading">Error al recibir información!</h4>
-					{error.message}
-					<hr>
-					<p class="mb-0">Recargue la página y si el problema persiste contacte con {contactEmail}.</p>
-				</div>
-			{/await}
 
-
-			{#await items}
-				<div class="row">
-					{#each Array(9) as _, i}
-						<div class="col col-sm-6 col-lg-4"><PreThumbItem /></div>
-					{/each}
-				</div>
-			{:then items}
-				{#if items.length == 0}
+				{#if sectionData.items.length == 0}
 					<div class="row">
 						<div class="col">
 							No se han encontrado artículos o ha habido un problema al
@@ -143,26 +141,17 @@
 					</div>
 				{:else}
 					<div class="row">
-						{#each items as item}
+						{#each sectionData.items as item}
 							<div class="col col-sm-6 col-lg-4 col-xl-4">
 								<ThumbItem on:select="{onSelectThumb}" fart={item} />
 							</div>
 
 						{/each}
 					</div>
-					<div class="modal fade" id="modalItemDetails" tabindex="-1" role="dialog">
-						<div class="modal-dialog modal-dialog-centered modal-xl" role="document">
-							<div class="modal-content">
-								<div class="modal-body">
-									<button on:click={()=>{window.$('#modalItemDetails').modal('hide');}} type="button" class="close" data-dismiss="modal" aria-label="Close">
-										<span aria-hidden="true">&times;</span>
-									</button>
-									<DetailsItem fart={selART} />
-								</div>
-							</div>
-						</div>
-					</div>
+					<ModalDetails items="{sectionData.items}" selected="{selectedProduct}"></ModalDetails>
 				{/if}
+
+
 			{:catch error}
 				<div class="alert alert-danger" role="alert">
 						<h4 class="alert-heading">Error al recibir información!</h4>
@@ -172,6 +161,8 @@
 				</div>
 			{/await}
 
+
 		</div>
 	</section>
 </main>
+

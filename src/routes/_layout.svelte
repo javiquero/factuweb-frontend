@@ -1,6 +1,6 @@
 <script context="module">
 	export async function preload(page, session) {
-
+		// if (localStorage.getItem('fw-token')) {console.log("logado");}else{console.log("nologado");}
 	}
 </script>
 
@@ -85,8 +85,8 @@
 
 <div class="pageContent">
 {#if $session.token}
-	<div  class="secondarytopbar d-block d-md-none ">
-		<div style="max-width:500px; width:100%;    display: inline-block;">
+	<div  class="secondarytopbar d-block d-md-none">
+		<div style="max-width:500px; width:100%;  display: inline-block;">
 			<TopbarSearch bind:value={searchText}></TopbarSearch>
 		</div>
 	</div>
@@ -128,8 +128,15 @@
     .navbar-brand {
 		margin-left: 30px;
 		line-height: 1;
+
     }
 }
+
+@media only screen and (max-width: 600px) {
+		.topnavbar	.navbar-brand {
+				margin-left: 0px !important;
+			}
+		}
 .topnavbar.navbar.bg-light {
 	-webkit-backdrop-filter: saturate(180%) blur(20px);
 	backdrop-filter: saturate(180%) blur(20px);

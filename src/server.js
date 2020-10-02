@@ -2,7 +2,7 @@ import sirv from 'sirv';
 import polka from 'polka';
 import compression from 'compression';
 import * as sapper from '@sapper/server';
-import {apiUrl,PORT} from './config';
+import {apiUrl, PORT} from './config';
 
 const proxy = require('http-proxy-middleware');
 const apiProxy = proxy('/api', {target: apiUrl, changeOrigin: true});
@@ -10,7 +10,7 @@ const dev = 'development';
 
 function logger(req, res, next) {
     // console.log(`~> Received ${req.method} on ${req.url}`);
-    next();
+	next();
 }
 
 import { post } from "./lib/api";
@@ -18,7 +18,6 @@ async function authenticationMiddleware(req, res, next) {
     const isFile = req.path.includes('.');
     if (isFile || req.path.substr(0, 4) == "/api") return next();
     const cookies = require('cookie-universal')(req, res);
-
     if (cookies.get('fw-token')!=undefined && cookies.get('fw-data') == undefined) {
         try {
             let data = await post("auth/relogin", {}, cookies.get('fw-token'));
@@ -30,7 +29,12 @@ async function authenticationMiddleware(req, res, next) {
             req.token = null
             cookies.remove('fw-token')
             cookies.remove('fw-data')
-            console.log('err at users', e.toString());
+			console.error('err at users', e.toString());
+			if (req.path!="/login" && req.path!="/"){
+                res.statusCode= 302;
+                res.setHeader('Location', '/login');
+                res.end();
+            }
         }
     } else {
         if (cookies.get('fw-token') == undefined) {
@@ -52,7 +56,9 @@ async function authenticationMiddleware(req, res, next) {
     }
     next();
 }
+
 polka()
+
     .use(
         compression({
             threshold: 0
@@ -69,7 +75,8 @@ polka()
                 token: req.token
             })
         })
-    )
+	)
+
     .listen(PORT, err => {
         if (err) {
             console.log('error', err);

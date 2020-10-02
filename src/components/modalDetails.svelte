@@ -37,7 +37,6 @@
 		if (selected!=undefined){
 			if (event.key == "ArrowRight"){
 				let found = items.findIndex(element => (element.CODART == selected.CODART && element.idx == selected.idx));
-				console.log(found);
 				if (found>-1){
 					if (found < items.length-1){
 						selected = items[found+1];
@@ -70,10 +69,13 @@
 <div class="modal fade" id="modalItemDetails" tabindex="-1" role="dialog">
 	<div class="modal-dialog modal-dialog-centered modal-xl" role="document">
 		<div class="modal-content">
-			<div class="modal-body">
-				<button on:click={()=>{hideModal()}} type="button" class="close" data-dismiss="modal" aria-label="Close">
+			<div class="modal-body" style="margin-bottom:30px;">
+			<button type="button" class="close" data-dismiss="modal" aria-label="Close" style="font-size:30px;">
+          		<span aria-hidden="true">&times;</span>
+        	</button>
+				<!-- <button on:click={()=>{hideModal()}} type="button" class="close" data-dismiss="modal" aria-label="Close">
 					<span aria-hidden="true">&times;</span>
-				</button>
+				</button> -->
 				<DetailsItem fart={selected} />
 			</div>
 		</div>

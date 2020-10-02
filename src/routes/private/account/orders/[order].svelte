@@ -2,7 +2,12 @@
 	<script context="module">
 		export async function preload(page, session, query) {
 			const { order } = page.params;
-			return {numOrder: order	};
+			let t = order.split("-");
+			if (t.length==3){
+				return {YEAR: t[0], TIPPCL: t[1], CODPCL: t[2]};
+			}else{
+				return this.redirect(301, '/private/')
+			}
 		}
 	</script>
 <!-- // End SAPPER preLoad Section -->
@@ -10,19 +15,20 @@
 <script>
 	import Pretable from "@/components/preTable.svelte";
 	import Pretext from "@/components/preText.svelte";
-	import ModalDetails from "@/components/modalDetails.svelte";
-
-	// import AddCart from "@/components/addCart.svelte";
+	import ModalDetails from "@/components/modalDetails.svelte";;
 	import { siteName, contactEmail } from "@/config";
 	import { formatDate, formatCurrency} from "@/lib/functions";
 	import { get } from "@/lib/api";
+	import { cart } from "@/store/cart.js";
 	import { stores } from "@sapper/app";
 	const { session} = stores();
 
 	let order = [];
 	let items = [];
 	export let title = "Detalle de pedido";
-	export let numOrder=undefined;
+	export let YEAR=undefined;
+	export let TIPPCL=undefined;
+	export let CODPCL=undefined;
 
 	let lineSelected = undefined;
 	function onSelectLine(line){
@@ -30,19 +36,28 @@
 			lineSelected = line.info;
 		}
 	}
-
 	function getOrder() {
-			return new Promise(async (resolve, reject) => {
+		return new Promise(async (resolve, reject) => {
 			try {
-				let o = await get(`fpcl/${numOrder}`,"",$session.token);
+				let o = await get("order/" + YEAR +"/" + TIPPCL + "/" + CODPCL , undefined ,$session.token);
 				items = [];
-				await Promise.all(o.lines.map(item => {if (item.info) item.info.idx=item.POSLPC; if (item.info.CODART && item.info.IMGART ) items.push(item.info)}))
+				await Promise.all(o.lines.map(item => {if (item.info) item.info.idx=item.POSLPC; if (item.info.CODART && item.info.IMGART) items.push(item.info)}))
 				return resolve (order = o);
 			} catch (e) {
 				console.error("Order - ", e);
 				return reject (e)
 			}
 		});
+	}
+	async function addAllToCart(){
+		let list = [];
+		await Promise.all(order.lines.map(async item => {
+			if (item.info.CODART && item.info.SUWART==1 && item.info.FAMART!="" && item.PRELPC>0 ){
+				item.info.type=0;
+				list.push({item:item.info, add: true, qty: item.CANLPC})
+			}
+		}))
+		await cart.setList(list);
 	}
 
 </script>
@@ -62,7 +77,7 @@
 		</nav>
 		{#await getOrder()}
 			<div class="row">
-				<div class="col-6 ">
+				<div class="col-sm-6 ">
 					<div class="block-title">
 						<Pretext />
 					</div>
@@ -70,7 +85,7 @@
 						<Pretext />
 					</div>
 				</div>
-				<div class="col-6 text-right">
+				<div class="col-sm-6 text-right">
 					<div class="" style="max-width:220px; width:220px; float:right;">
 						<Pretext />
 						<Pretext />
@@ -91,10 +106,10 @@
 				</div>
 				<div class="col-6 text-right">
 					<div class="" style="max-width:220px; width:220px; float:right;">
-						<a href="{null}" class="btn btn-fw btn-light btn-block" role="button" >
+						<a href="/api/image/download/order/{YEAR}/{TIPPCL}/{CODPCL}" class="btn btn-fw btn-light btn-block" role="button" >
 							Descargar imagenes <i style="float: right; line-height: 22px;" class="fal fa-images"></i>
 						</a>
-						<button class="btn btn-fw btn-light btn-block" disabled type="button" >
+						<button class="btn btn-fw btn-light btn-block"  type="button" on:click={addAllToCart}>
 							Añadir todo al carro <i style="float: right; line-height: 22px;" class="fal fa-shopping-basket"></i>
 						</button>
 						<button class="btn btn-fw btn-light btn-block" disabled type="button" >
@@ -104,7 +119,7 @@
 				</div>
 			</div>
 
-			<table class="table fadeIn animate table-hover mt-3">
+			<table class="table fadeIn table-responsive animate table-hover mt-3">
 				<thead class="thead-light">
 					<tr>
 						<th scope="col"></th>
@@ -119,7 +134,7 @@
 				<tbody>
 					{#if order.lines}
 						{#each order.lines as line}
-							<tr style="" on:click={()=>{onSelectLine(line)}}>
+							<tr  on:click={()=>{onSelectLine(line)}}>
 								<td style="min-width:100px; width:100px;padding:5px;">
 									<div class="thumb-image media text-center">
 									{#if line.ARTLPC && line.CANLPC}

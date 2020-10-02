@@ -1,5 +1,5 @@
 <script>
-	import TableInvoices from "../../../components/tableInvoices.svelte"
+	import TableInvoices from "@/components/tableInvoices.svelte"
 </script>
 
 <section >

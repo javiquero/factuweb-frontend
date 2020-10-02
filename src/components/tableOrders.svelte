@@ -11,15 +11,20 @@
 	export let title = "Pedidos";
 
 	function onSelectLine(o){
-		goto("/private/account/orders/" + o.id);
+		goto("/private/account/orders/" + o.YEAR + "-" + o.TIPPCL + "-" + o.CODPCL);
 	}
 
 	function getOrders() {
 		return new Promise(async (resolve, reject) => {
 			try {
-				let q= 'fpcl';
-				if (max!=undefined) q+="?limit=" + max;
-				let o = await get(q, undefined, $session.token);
+				if (max==undefined) max=100000;
+				let o = await get("orders/list/"+max, undefined ,$session.token);
+				await Promise.all(o.map(async (order) => {
+					order.PEND=0;
+					await Promise.all(order.lines.map(async (line) => {
+						order.PEND+=line.PENLPC;
+					}));
+				}));
 				return resolve (orders = o);
 			} catch (e) {
 				console.error("Orders - ", e);
@@ -27,6 +32,7 @@
 			}
 		});
 	}
+
 </script>
 
 <style type="text/scss" lang="scss">
@@ -54,7 +60,7 @@
 	{#await getOrders()}
 		<Pretable cols="6" rows="{!max?6:4}" />
 	{:then orders}
-		<table class="table fadeIn animate table-hover">
+		<table class="table fadeIn table-responsivee animate table-hover">
 		<thead class="thead-light">
 		<tr>
 		<th scope="col"></th>
@@ -79,7 +85,7 @@
 				{:else}
 					{#each orders as o}
 						<tr on:click={()=>onSelectLine(o)}>
-							<td><a href="/private/account/orders/{o.id}"> <i class="fa fa-search" aria-hidden="true"></i></a></td>
+							<td><a href="/private/account/orders/{o.YEAR}-{o.TIPPCL}-{o.CODPCL}"> <i class="fa fa-search" aria-hidden="true"></i></a></td>
 							<td>{o.TIPPCL}-{o.CODPCL}</td>
 							<td>{formatDate(o.FECPCL)}</td>
 							<td>

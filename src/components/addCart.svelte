@@ -60,7 +60,6 @@
 	function prevent(event){
 		event.preventDefault();
 		event.stopPropagation();
-
 	}
 	window.$(function () {
   		window.$('[data-toggle="tooltip"]').tooltip()
@@ -69,6 +68,7 @@
 
 <style lang="scss">
 	.fw-add-to-cart{
+		    min-width: 180px;
 		.container-add-btn {
 			margin: 7px 0px 0px;
 			.btn {
@@ -135,26 +135,28 @@
 </style>
 
 <div class="fw-add-to-cart">
-	<div class="container-add-btn">
-		{#if !showCant}
-			<div class="col col-12 pr-0">
-				<button type="button" style="border: 2px solid #23272b; color: #23272b" class="btn btn-outline-primary" on:click={toggleQty} data-toggle="tooltip" data-placement="right" title="Añadir al carro">
-					<!-- <img src="/img/shopping-cart.png" alt="" /> -->
-					<i style="font-size: 23px; padding-top:3px;" class="fal fa-shopping-basket"></i>
-				</button>
-			</div>
-		{:else}
-			<div style="text-align:end;margin-bottom: -6px;">
-				<div style=" display:inline-block;"on:mousedown={quit} on:mouseup="{prevent}" on:click="{prevent}" use:longpress on:longpress={quitbox}>
-					<span class="btn btn-qty">-</span>
+	{#if fart.FAMART!="" && fart.SUWART==1}
+		<div class="container-add-btn">
+			{#if !showCant}
+				<div class="col col-12 pr-0">
+					<button type="button" style="border: 2px solid #23272b; color: #23272b" class="btn btn-outline-primary" on:click={toggleQty} data-toggle="tooltip" data-placement="right" title="Añadir al carro">
+						<!-- <img src="/img/shopping-cart.png" alt="" /> -->
+						<i style="font-size: 23px; padding-top:3px;" class="fal fa-shopping-basket"></i>
+					</button>
 				</div>
-				<div style="display:inline-block;max-width: 80px;">
-					<input type="number" style="width:100%;" bind:value={qty} on:change={onInputChange} on:mouseup="{prevent}" on:click="{prevent}" class="input-qty" />
+			{:else}
+				<div style="text-align:end;margin-bottom: -6px;">
+					<div style=" display:inline-block;"on:mousedown={quit} on:mouseup="{prevent}" on:click="{prevent}" use:longpress on:longpress={quitbox}>
+						<span class="btn btn-qty">-</span>
+					</div>
+					<div style="display:inline-block;max-width: 80px;">
+						<input type="number" style="width:100%;" bind:value={qty} on:change={onInputChange} on:mouseup="{prevent}" on:click="{prevent}" class="input-qty" />
+					</div>
+					<div style="padding-left:5px; display:inline-block;"on:mousedown={add} on:mouseup="{prevent}" on:click="{prevent}" use:longpress on:longpress={addbox}>
+						<span class="btn btn-qty">+</span>
+					</div>
 				</div>
-				<div style="padding-left:5px; display:inline-block;"on:mousedown={add} on:mouseup="{prevent}" on:click="{prevent}" use:longpress on:longpress={addbox}>
-					<span class="btn btn-qty">+</span>
-				</div>
-			</div>
-		{/if}
-	</div>
+			{/if}
+		</div>
+	{/if}
 </div>

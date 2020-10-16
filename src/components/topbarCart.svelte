@@ -1,36 +1,36 @@
 <!-- <main> -->
 	<li class="nav-item dropdown topbarcart " class:active="{visible === true}">
-		{#if $cart.items.length>0}
+
 		<a class="nav-link dropdown-toggle" href="{null}" id="cartnavbarDropdown" role="button" data-toggle="dropdown"
 			aria-haspopup="true" aria-expanded="false">
 			<i style="font-size: 23px; padding-top:3px;" class="fal fa-shopping-basket"></i>
 			<span class="badge badge-success">{$cart.items.length}</span>
 		</a>
-		{:else}
-		<a class="nav-link dropdown-toggle" href="{null}" id="cartnavbarDropdown" >
-			<i style="font-size: 23px; padding-top:3px;" class="fal fa-shopping-basket"></i>
-			<span class="badge badge-success">{$cart.items.length}</span>
-		</a>
-		{/if}
-		<div class="dropdown-menu dropdown-menu-right"  style="position: absolute;padding:0px;" aria-labelledby="cartnavbarDropdown">
-			<a href="/private/cart" class="dropdown-menu-title" >
-				Ver el carro - {formatCurrency(total)}
-			</a>
-			<div style="height: 300px; overflow-y: scroll;">
-				<ul style="padding:5px 10px;">
-					{#each $cart.items.reverse().slice(0, 50) as item }
-						<CartItem item="{item}" />
-					{/each}
-				</ul>
-			</div>
-			<div class="dropdown-menu-footer" style="">
-				<div class="row">
-					<div class="col text-left">Portes gratis a partir de 200€</div>
-					<div class="col text-right">
-					<button type="button" class="btn btn-link" data-toggle="modal" data-target="#ModalRemoveCart">Vaciar el carro</button>
+
+			<div class="dropdown-menu dropdown-menu-right"  style="position: absolute;padding:0px;" aria-labelledby="cartnavbarDropdown">
+				<a href="/private/cart" class="dropdown-menu-title" >
+					Ver el carro - {total}
+				</a>
+				<div style="height: 300px; overflow-y: scroll;">
+					<ul style="padding:5px 10px;">
+						{#each $cart.items.reverse().slice(0, 50) as item }
+							<CartItem item="{item}" />
+						{/each}
+					</ul>
+				</div>
+				<div class="dropdown-menu-footer" style="">
+					<div class="row">
+						<div class="col text-left">Portes gratis a partir de 200€</div>
+						<div class="col text-right">
+							<!-- <button type="button" class="btn btn-link" data-toggle="modal" data-target="#ModalRemoveCart">Vaciar el carro</button> -->
+							<a href="/private/cart" type="button" class="btn btn-sm btn-success" > Ver el carro </a>
+						</div>
+					</div>
 				</div>
 			</div>
-		</div>
+
+		<!-- {/if} -->
+
 	</li>
 	<!-- Modal -->
 	<div class="modal fade" id="ModalRemoveCart" tabindex="-1" role="dialog" aria-labelledby="ModalRemoveCartTitle" aria-hidden="true">
@@ -65,8 +65,12 @@ import { onMount } from 'svelte';
 
 onMount(async () => {
 	window.$("#ModalRemoveCart").appendTo("body");
-	window.$('.topbarcart').on('show.bs.dropdown', function () {
-		visible=true;
+	window.$('.topbarcart').on('show.bs.dropdown', function (e) {
+		if ($cart.items.length>0){
+			visible=true;
+		}else{
+			e.preventDefault();
+		}
 	});
 	window.$('.topbarcart').on('hide.bs.dropdown', function () {
 		visible=false;
@@ -75,15 +79,16 @@ onMount(async () => {
 
 let visible = false;
 let total = 0;
-$: calcTotal($cart)
+$: total = calcTotal($cart)
 
 function calcTotal(c){
-	total = 0;
+	let total = 0;
 	if (c==undefined) return;
 	c.items.forEach(element => {
 		total += parseFloat(element.qty) * (parseFloat(element.price.clientPrice));
 	});
-	// return formatCurrency(total);
+	if (c.items.length<1 && visible) window.$('.topbarcart .dropdown-toggle').click()
+	return formatCurrency(total);
 }
 
 function removeCart (){
@@ -93,6 +98,11 @@ function removeCart (){
 
 
 <style lang="scss">
+@media only screen and (max-width: 600px) {
+		.topbarcart	.dropdown-menu {
+				max-width: 350px!important;
+			}
+		}
 	.topbarcart {
 	// 	position: absolute;
     // right: 20px;
@@ -116,7 +126,6 @@ function removeCart (){
 					content: none;
 				}
 			}
-
 		}
 
 		.dropdown-menu{
@@ -126,7 +135,7 @@ function removeCart (){
 			margin-top:-3px;
 			.dropdown-menu-footer{
 				font-size: 14px;
-				height:40px;
+				height:60px;
 				padding: 10px 20px;
 				color: gray;
 				-webkit-box-shadow: 0px -14px 18px -17px rgba(0,0,0,0.61);
@@ -138,7 +147,6 @@ function removeCart (){
 					font-size:14px;
 					&:hover{
 						text-decoration: none;
-
 						color:red;
 					}
 				}

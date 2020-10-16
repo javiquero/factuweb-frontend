@@ -1,8 +1,8 @@
-
+<!-- // SAPPER preLoad Section -->
 	<script context="module">
 		export async function preload(page, session, query) {
-			const p = page.query;
-			return{ params:p }
+
+
 		}
 	</script>
 
@@ -10,186 +10,174 @@
 	import ThumbItem from "@/components/thumbItem.svelte";
 	import PreThumbItem from "@/components/preThumbItem.svelte";
 	import PreText from "@/components/preText.svelte";
-	import { siteName, contactEmail } from "@/config";
-	import { stores } from "@sapper/app";
-	import { get } from "@/lib/api";
 	import ModalDetails from "@/components/modalDetails.svelte";
-	// import SvelteInfiniteScroll from "svelte-infinite-scroll";
+	import { siteName, contactEmail } from "@/config";
+	import { stores } from "@sapper/app"
+	import { get } from "@/lib/api";
 
-	export let params;
 	const { session } = stores()
 
-	import {onMount} from 'svelte';
-	let myComponent;
 
-	onMount(async () => {
-		const module = await import('svelte-infinite-scroll');
-		myComponent = module.default;
-    });
+	let page = 1;
+	let perPage= 100;
 
 
-	$: onChangeParams(params);
-	function onChangeParams(p){
-		if (params.page == undefined)  params.page=1;
-		console.log("params: ", p);
-		page = p.page;
-	}
+	// let remoteData= [];
+	// $:remoteData = getRemoteData()
 
-	let page =0;
-	// $: onChangePage(page);
-	// async function onChangePage (numPage){
-	// 	if (numPage==undefined)return;
-	// 	console.log(numPage);
-	// 	if (numPage>1){
-	// 		let newItems = await loadPage(numPage);
-	// 		items = items.concat(newItems);
-	// 	}
-	// }
+	// let remoteSections= [];
+	// $:remoteSections = getSections()
 
-	let itemSelected = undefined;
-	function onSelectThumb(event){
-		itemSelected= event.detail;
-	}
+let items = [];
+	let data = undefined;
+	$: data= getData()
 
-	let totItems = 0;
-	let itemsPerPage= 12;
-	let totPages =0;
-
-	let items = [];
-	let moreItems = [];
-	$: items = [
-		...items,
-    	...moreItems
-	];
-
-	async function fetchData() {
-		let from = (page-1) * itemsPerPage;
-		let q = `flfa?from=${from}&items=${itemsPerPage}`;
-		let o = await get(q, undefined ,$session.token);
-		moreItems = o;
-	};
-
-	onMount(()=> {
-		// load first batch onMount
-		// fetchData();
-	})
-
-	// let its = firstLoad();
-	// $: onChangeIts(its);
-	// function onChangeIts(value){
-	// 	items = value;
-	// }
-
-	let waitTotItems = getTotItems();
-	function getTotItems(){
-		return new Promise((resolve, reject) =>{
+	function getData(){
+		return new Promise(async (resolve, reject) =>{
 			try {
-				get(`flfa?count=1`, undefined ,$session.token).then(o=>{
-					totItems = o;
-					totPages = Math.ceil(o/itemsPerPage) ;
-					return resolve();
-				});
-			} catch (e) {
-				console.error("getTotItems - ", e);
-				return reject (e)
+				let d = await Promise.all([getSections(), getRemoteData()]);
+				await Promise.all(d[0].map(async section => {
+					section.numitems = 0;
+					await Promise.all(section.fam.map(async fam => {
+						fam.items=[];
+						await Promise.all(d[1].map(async item => {
+							if (item.FAMART==fam.CODFAM){
+								section.numitems +=1;
+								fam.items.push(item);
+								if (item.CODART && item.IMGART ) items.push(item);
+							}
+						}));
+					}));
+				}));
+				console.log(d);
+				return resolve(d)
+			} catch (error) {
+				console.error(error);
+				return reject(error);
+			}
+
+		});
+	}
+
+	function getSections() {
+		return new Promise(async (resolve, reject) =>{
+			try {
+				let c = await get(`catalog`);
+				// console.log(c);
+				return resolve(c);
+			} catch (error) {
+				console.log(error);
+				return reject(error);
 			}
 		});
 	}
-	let its = fload();
-	function fload (){
+
+	function getRemoteData(){
 		return new Promise(async (resolve, reject) =>{
-			let q = `flfa?from=0&items=${itemsPerPage}`;
-			let o = await get(q, undefined ,$session.token);
-			moreItems = o;
-			return resolve(o);
+			try {
+				let items = await get(`products/list`,"",$session.token);
+				return resolve(items);
+			} catch (error) {
+				console.error(error);
+				return reject(error);
+			}
 		});
 	}
-	// function firstLoad() {
-	// 	return new Promise(async (resolve, reject) => {
-	// 		console.log("FirstLoad");
-	// 		try {
-	// 			let i = await loadPage(params.page);
-	// 			return resolve(i);
-	// 		} catch (e) {
-	// 			console.error("firstLoad - ", e);
-	// 			return reject (e)
-	// 		}
-	// 	});
-	// }
-
-	// function loadPage(numPage){
-	// 	return new Promise(async (resolve, reject) => {
-	// 		try {
-	// 			let from = (numPage-1) * itemsPerPage;
-	// 			if (!isNaN(from)){
-	// 				console.log("loadPage:", from );
-	// 				let q = `flfa?from=${from}&items=${itemsPerPage}`;
-	// 				let o = await get(q, undefined ,$session.token);
-	// 				return resolve (o);
-	// 			}else{
-	// 				console.log("loadPage isNan:", numPage);
-	// 				return resolve([])
-	// 			}
-	// 		} catch (e) {
-	// 			console.error("Orders - ", e);
-	// 			return reject (e)
-	// 		}
-	// 	});
-	// };
-
-
+	let selectedProduct = undefined;
+	function onSelectThumb(event){
+		selectedProduct= event.detail;
+		console.log(event);
+	}
 </script>
 
 <svelte:head>
-  <title>{siteName} - Historial de compras</title>
+  <title>{siteName} </title>
 </svelte:head>
-
 <main>
 
 
-	<section >
-	<div class="container-fluid">
-		{#await waitTotItems}
-			Cargando...
-		{:then value}
-				TotItems: {totItems}<br/>
-				TOTPAGES: {totPages}<br/>
-				{JSON.stringify(params)}
-		{/await}
-
-		<!-- <div class="container-xl"> -->
-			{#await its}
+	<section class="items-section">
+	<!-- <div class="container-fluid"> -->
+		<div class="container-fluid">
+			{#await data}
 				<div class="row">
-					{#each Array(6) as _, i}
-						<div class="col col-sm-6 col-lg-4"><PreThumbItem /></div>
+						<div class="col mb-3">
+							<PreText></PreText>
+						</div>
+					<div class="col text-right">
+						<PreText></PreText>
+					</div>
+				</div>
+
+				<div class="row">
+					{#each Array(9) as _, i}
+						<div class="col-xs-12 col-sm-6 col-lg-6 col-xl-4"><PreThumbItem /></div>
 					{/each}
 				</div>
-			{:then items}
-				{#if items.length == 0}
+			{:then data}
+					<div class="row mb-3">
+						<div class="col-xs-12 col-sm-8 ">
+							<h1>Listado de artículos comprados</h1>
+						</div>
+						<div class="col-xs-12 col-sm-4 text-right">
+							<div class="dropdown">
+								<a href="/api/image/download/products" download class="btn btn-light btn-sm" role="button" >
+									Descargar imagenes
+								</a>
+							</div>
+						</div>
+					</div>
+
+				{#if data[1].length == 0}
 					<div class="row">
 						<div class="col">
 							No se han encontrado artículos o ha habido un problema al
 							recuperar la información del servidor.
-							{items}
 						</div>
 					</div>
 				{:else}
-					<div class="row">
-					<!-- {JSON.stringify(items)} -->
-						{#each items as item}
-							<div class="col col-md-12 col-lg-6 col-xl-4">
-								<ThumbItem on:select="{()=>{itemSelected=item}}" fart={item} />
+					<!-- {#each data[0] as section}
+						{#if section.numitems > 0}
+							<div class="row">
+								<h3>{section.DESSEC}</h3>
 							</div>
-						{/each}
-						<svelte:component this={myComponent}  hasMore={moreItems.length}
-      threshold={100}
-      on:loadMore={() => {page++; fetchData()}} />
-						<!-- <SvelteInfiniteScroll threshold={itemsPerPage} on:loadMore={() => page++} /> -->
-					</div>
-					<ModalDetails items="{items}" selected="{itemSelected}"></ModalDetails>
+							{#each section.fam as fam}
+								{#if fam.items.length > 0}
+									<div class="row" style="padding-left: 20px;">
+										<h4> <a href="#{fam.CODFAM}">{fam.DESFAM}</a></h4>
+									</div>
+								{/if}
+							{/each}
 
+						{/if}
+					{/each} -->
+					{#each data[0] as section}
+						{#if section.numitems > 0}
+							<div class="row" style="border-top: 1px solid #ccc;">
+								<h2>{section.DESSEC}</h2>
+							</div>
+							{#each section.fam as fam}
+								{#if fam.items.length > 0}
+									<div class="row" style="padding-left: 20px;">
+										<h3 id="{fam.CODFAM}">{fam.DESFAM}</h3>
+									</div>
+									<div class="row">
+									{#each fam.items as item}
+										<div class="col-xs-12 col-sm-6 col-lg-6 col-xl-4">
+											<ThumbItem on:select="{onSelectThumb}" fart={item} />
+										</div>
+									{/each}
+									</div>
+								{/if}
+							{/each}
+
+						{/if}
+					{/each}
+					<ModalDetails items="{items}" selected="{selectedProduct}"></ModalDetails>
 				{/if}
-			 {:catch error}
+
+
+			{:catch error}
 				<div class="alert alert-danger" role="alert">
 						<h4 class="alert-heading">Error al recibir información!</h4>
 					{error.message}
@@ -197,6 +185,68 @@
 					<p class="mb-0">Recargue la página y si el problema persiste contacte con {contactEmail}.</p>
 				</div>
 			{/await}
+
+
+
+
+
+
+<!-- {#await remoteData}
+				<div class="row">
+						<div class="col mb-3">
+							<PreText></PreText>
+						</div>
+					<div class="col text-right">
+						<PreText></PreText>
+					</div>
+				</div>
+
+				<div class="row">
+					{#each Array(9) as _, i}
+						<div class="col-xs-12 col-sm-6 col-lg-6 col-xl-4"><PreThumbItem /></div>
+					{/each}
+				</div>
+			{:then items}
+					<div class="row mb-3">
+						<div class="col-xs-12 col-sm-8 ">
+							<h1>Listado de artículos comprados</h1>
+						</div>
+						<div class="col-xs-12 col-sm-4 text-right">
+							<div class="dropdown">
+								<a href="/api/image/download/products" download class="btn btn-light btn-sm" role="button" >
+									Descargar imagenes
+								</a>
+							</div>
+						</div>
+					</div>
+
+				{#if items.length == 0}
+					<div class="row">
+						<div class="col">
+							No se han encontrado artículos o ha habido un problema al
+							recuperar la información del servidor.
+						</div>
+					</div>
+				{:else}
+					<div class="row">
+						{#each items as item}
+							<div class="col-xs-12 col-sm-6 col-lg-6 col-xl-4">
+								<ThumbItem on:select="{onSelectThumb}" fart={item} />
+							</div>
+						{/each}
+					</div>
+					<ModalDetails items="{items}" selected="{selectedProduct}"></ModalDetails>
+				{/if}
+
+
+			{:catch error}
+				<div class="alert alert-danger" role="alert">
+						<h4 class="alert-heading">Error al recibir información!</h4>
+					{error.message}
+					<hr>
+					<p class="mb-0">Recargue la página y si el problema persiste contacte con {contactEmail}.</p>
+				</div>
+			{/await} -->
 
 		</div>
 	</section>

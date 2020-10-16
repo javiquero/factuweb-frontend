@@ -5,7 +5,10 @@
 </script>
 
 <script>
-  import { siteName } from "./../../../config";
+  	import { siteName } from "@/config";
+
+
+
 </script>
 
 <svelte:head>
@@ -14,7 +17,8 @@
 
 
 <main>
-	<section class="background-logo">
+	<section class="background-logo" style="height:490px;opacity: 0.5;">
+
 	</section>
 </main>
 

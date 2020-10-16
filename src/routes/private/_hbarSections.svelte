@@ -4,20 +4,27 @@
 	import {get} from "@/lib/api";
 	import { stores } from "@sapper/app";
 	const { session} = stores();
+	import { onMount } from 'svelte';
 
-	let sections = undefined;
-	async function getSections() {
-		 try {
-			let s = await get(`fsec?where={"SUWSEC":"1"}&sort="ORDSEC"&limit=10000`,undefined ,$session.token);
-			let f = await get(`ffam?where={"SUWFAM":"1"}&sort="ORDFAM"&limit=10000`,undefined ,$session.token);
-			await Promise.all(s.map(async section => {
-				section.FAMs = f.filter(fam => fam.SECFAM == section["CODSEC"]);
-			}));
-			return (sections = s);
-		 } catch (e) {
-			console.error("hbarSections - " + e);
-		 }
+	// let promisegetSections = getSections()
+	let sections = [];
+
+	function getSections() {
+		return new Promise(async (resolve, reject) =>{
+			try {
+				let c = await get(`catalog`);
+				return resolve(c);
+			} catch (error) {
+				console.log(error);
+				return reject(error);
+			}
+		});
 	}
+
+	onMount(async () => {
+		sections = await getSections();
+	});
+
 </script>
 
 <style lang="scss">
@@ -42,39 +49,35 @@
  			visibility: visible;
 		}
 
-// .dropdown:hover .dropdown-menu {
-//   display: block;
-// }
+		// .dropdown:hover .dropdown-menu {
+		//   display: block;
+		// }
 	}
 </style>
 
 <section class="sections-bar">
 	<nav class="navbar navbar-dark bg-dark">
 		<div class="navbar-header">
-			{#await getSections()}
-			<span class="navbar-text">Cargando... espera</span>
-			{:then sections}
-			{#if !sections || sections.length == 0}
-				<span class="navbar-text">Error! ha sido imposible recuperar las secciones del servidor, haga click<a href="/private">aquí</a></span>
-			{:else}
-				<ul class="nav navbar-nav mr-auto" style="display:inline-block">
-					{#each sections as s}
-						{#if s['FAMs'] && s['FAMs'].length > 0}
-							<li class="nav-item dropdown" style="float:left;margin-left:20px">
-							<a class="nav-link dropdown-toggle" href="/#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-								{s.DESSEC}
-							</a>
-							<div class="dropdown-menu" aria-labelledby="navbarDropdown" style="position:absolute;">
-							{#each s.FAMs as f}
+		<ul class="nav navbar-nav mr-auto" style="display:inline-block">
+			{#each sections as s}
+				{#if s['fam'] && s['fam'].length > 0}
+					<li class="nav-item dropdown" style="float:left;margin-left:20px">
+						<a class="nav-link dropdown-toggle" href="/#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+							{s.DESSEC}
+						</a>
+						<div class="dropdown-menu" aria-labelledby="navbarDropdown" style="position:absolute;">
+							{#each s.fam as f}
 								<a class="dropdown-item" href="/private/catalog/section/{f.CODFAM}"> {f.DESFAM}</a>
-								{/each}
-							</div>
-							</li>
-						{/if}
-					{/each}
-					</ul>
-			{/if}
-			{/await}
+							{/each}
+						</div>
+					</li>
+				{:else}
+					<li class="nav-item dropdown" >
+						<span class="navbar-text">Error! ha sido imposible recuperar las secciones del servidor, haga click<a href="/private">aquí</a></span>
+					</li>
+				{/if}
+			{/each}
+			</ul>
 		</div>
 	</nav>
 </section>

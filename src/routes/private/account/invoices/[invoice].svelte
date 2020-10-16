@@ -2,28 +2,35 @@
 	<script context="module">
 		export async function preload(page, session, query) {
 			const { invoice } = page.params;
-			return {numInvoice: invoice	};
+			let t = invoice.split("-");
+			if (t.length==3){
+				return {YEAR: t[0], TIPFAC: t[1], CODFAC: t[2]};
+			}else{
+				return this.redirect(301, '/private/')
+			}
 		}
 	</script>
 <!-- // End SAPPER preLoad Section -->
 
 <script>
-	import Pretable from "./../../../../components/preTable.svelte";
-	import Pretext from "./../../../../components/preText.svelte";
-	// import DetailsItem from "./../../../../components/detailsItem.svelte";
-	// import AddCart from "./../../../../components/addCart.svelte";
-	import { siteName, contactEmail } from "./../../../../config";
+	import Pretable from "@/components/preTable.svelte";
+	import Pretext from "@/components/preText.svelte";
+	import { siteName, contactEmail } from "@/config";
 	import ModalDetails from "@/components/modalDetails.svelte";
 
-	import { formatDate, formatCurrency} from "./../../../../lib/functions";
-	import { get } from "../../../../lib/api";
+	import { formatDate, formatCurrency} from "@/lib/functions";
+	import { get } from "@/lib/api";
 	import { stores } from "@sapper/app";
+	import { cart } from "@/store/cart.js";
 	const { session} = stores();
 
 	let invoice = [];
-	let items = [];
-	export let title = "Detalle de factura";
-	export let numInvoice=undefined;
+	let items=[];
+
+	let title = "Detalle de factura";
+	export let YEAR=undefined;
+	export let TIPFAC=undefined;
+	export let CODFAC=undefined;
 
 	let lineSelected = undefined;
 	function onSelectLine(line){
@@ -33,19 +40,29 @@
 	}
 
 	function getInvoice() {
-			return new Promise(async (resolve, reject) => {
+		return new Promise(async (resolve, reject) => {
 			try {
-				let o = await get(`ffac/${numInvoice}`,"",$session.token);
+				let o = await get("invoice/" + YEAR +"/" + TIPFAC + "/" + CODFAC , undefined ,$session.token);
 				items = [];
 				await Promise.all(o.lines.map(item => {if (item.info) item.info.idx=item.POSLFA; if (item.info.CODART && item.info.IMGART ) items.push(item.info)}))
 				return resolve (invoice = o);
 			} catch (e) {
-				console.error("Invoice - ", e);
+				console.error("Invoices - ", e);
 				return reject (e)
 			}
 		});
 	}
 
+	async function addAllToCart(){
+		let list = [];
+		await Promise.all(invoice.lines.map(async item => {
+			if (item.info.CODART && item.info.SUWART==1 && item.info.FAMART!="" && item.PRELFA>0 ){
+				item.info.type=0;
+				list.push({item:item.info, add: true, qty: item.CANLFA})
+			}
+		}))
+		await cart.setList(list);
+	}
 
 </script>
 
@@ -67,7 +84,7 @@
 
 		{#await getInvoice()}
 			<div class="row">
-				<div class="col-6 ">
+				<div class="col-sm-6 ">
 					<div class="block-title">
 						<Pretext />
 					</div>
@@ -75,7 +92,7 @@
 						<Pretext />
 					</div>
 				</div>
-				<div class="col-6 text-right">
+				<div class="col-sm-6 text-right">
 					<div class="" style="max-width:220px; width:220px; float:right;">
 						<Pretext />
 						<Pretext />
@@ -86,7 +103,7 @@
 			<Pretable cols="5" rows="6" />
 		{:then invoice}
 			<div class="row">
-				<div class="col-6 ">
+				<div class="col-sm-6 ">
 					<div class="block-title">
 						<h1>{title}</h1>
 					</div>
@@ -94,12 +111,12 @@
 						<h2>Factura {invoice.TIPFAC}-{invoice.CODFAC} del {formatDate(invoice.FECFAC)}</h2>
 					</div>
 				</div>
-				<div class="col-6 text-right">
+				<div class="col-sm-6 text-right">
 					<div class="" style="max-width:220px; width:220px; float:right;">
-						<button class="btn btn-fw btn-light btn-block" disabled type="button" >
+						<a href="/api/image/download/invoice/{YEAR}/{TIPFAC}/{CODFAC}" class="btn btn-fw btn-light btn-block" role="button" >
 							Descargar imagenes <i style="float: right; line-height: 22px;" class="fal fa-images"></i>
-						</button>
-						<button class="btn btn-fw btn-light btn-block" disabled type="button" >
+						</a>
+						<button class="btn btn-fw btn-light btn-block"  type="button" on:click={addAllToCart}>
 							Añadir todo al carro <i style="float: right; line-height: 22px;" class="fal fa-shopping-basket"></i>
 						</button>
 						<button class="btn btn-fw btn-light btn-block" disabled type="button" >
@@ -109,7 +126,7 @@
 				</div>
 			</div>
 
-			<table class="table fadeIn animate table-hover mt-3">
+			<table class="table fadeIn animate table-responsive table-hover mt-3">
 				<thead class="thead-light">
 					<tr>
 						<th scope="col"></th>

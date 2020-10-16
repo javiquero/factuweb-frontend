@@ -23,7 +23,7 @@
 						</h3>
 					{:else}
 						<div class="row">
-							<div class="col pl-2 pr-2 " style="font-size:18px; height: 30px; overflow-y: hidden">
+							<div class="col pl-2 pr-2 " style="font-size:18px; height: 30px; overflow-y: hidden;padding-left: -0px!important;">
 								<div class="description">
 									{fart.DESART}
 								</div>
@@ -33,15 +33,18 @@
 							<div class="col pl-2 pr-2 mb-2">
 								<div class="ref bold">{fart.CODART}</div>
                 				<div class="ean bold">{fart.EANART}</div>
+								{#if fart.CE1ART != ""}
+									<div class="mod bold">Modelo: {fart.CE1ART}</div>
+								{/if}
 							</div>
 						</div>
 						<div class="row">
 							<div class="col-xl-8 col-lg-6 pl-2 pr-1">
 							<div class="thumb-image media text-center">
 										<img
-										src="/api/image/1024/{fart.CODART}"
-										alt="Imagen de la referéncia {fart.CODART}"
-										style="width:90%;"
+										src="/api/image/1024/{fart.IMGART}"
+										alt="Imagen de la referéncia  {fart.CODART}{fart.CE1ART!="" ? " modelo " + fart.CE1ART: ""}"
+										style="width:100%;"
 										class="align-self-center mr-0" />
 									</div>
 								<!-- <div class="thumb-image media text-center " style="background-image: url('/api/image/1024/{fart.CODART}'); background-size: cover;    background-size: contain;    background-repeat: no-repeat;    background-position: center;">
@@ -51,8 +54,8 @@
 									style="width:90%;"
 									class="align-self-center mr-3" /> --
 								</div> -->
-								<div>
-									<a href="/api/image/download/photo/{fart.CODART}" class="btn btn-light btn-sm"  role="button" >
+								<div style="position: absolute;bottom: 0px;">
+									<a href="/api/image/download/photo/{fart.IMGART}" class="btn btn-light btn-sm"  role="button" >
 										Descargar imagen
 									</a>
 								</div>
@@ -81,7 +84,7 @@
 
 											{#if fart.price && fart.price.dto > 0}
 												<div class="price brut">
-													Precio bruto:
+													Bruto:
 													<span class="bold">{formatCurrency(fart.price.price)}</span>
 												</div>
 													<div class="price remise">
@@ -175,13 +178,24 @@
 		display: inline-block;
 		font-family: roboto, serif;
 		font-size: 16px;
-		background-color: green;
+		background-color: #007bff;
 		padding: 0.2rem 0.8rem;
 		border-radius: 3px;
 		color: #fff;
 		font-weight: 600;
 		padding-top: 4px;
 	}
+
+	.mod {
+      display: inline-block;
+      font-family: roboto, serif;
+      background-color: #28a745;
+      padding: 0.2rem 0.8rem;
+      border-radius: 3px;
+      color: #fff;
+      font-weight: 600;
+      padding-top: 4px;
+    }
 
 	.fwcol {
 		padding: 0px;

@@ -13,8 +13,8 @@
 <section class="private-account">
 	<div class:container-fluid={segment === "items"} class:container-xl={segment != "items"}>
 		<div class="row">
-			<div class="col-lg-3 col-md-5 mt-5">
-				<div class="card mb-3" >
+			<div class="col-lg-3 col-md-5 mt-5 d-none d-lg-block">
+				<div class="card mb-3" style="max-width:300px;" >
 					<div class="card-header text-center" style="font-size:12px">{$session.user.NOFCLI} <br/>código: {$session.user.CODCLI} </div>
 					<div class="card-body text-secondary p-0">
 						<div class="list-group">
@@ -30,7 +30,7 @@
 					</div>
 				</div>
 			</div>
-			<div class="col-lg-9 col-md-7 mt-5">
+			<div class="col-lg-9 col-md-12 mt-5" style="max-width: 1300px;">
 				<slot />
 			</div>
 		</div>

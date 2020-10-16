@@ -1,5 +1,5 @@
-const apiUrl = 'http://factuapi:1337'
-const LOCAL_URL = 'http://localhost:5000'
+const apiUrl = 'http://localhost:1337'
+const LOCAL_URL = 'http://oficina.exclusivas2r.com:5000'
 // const REMOTE_URL = 'https://www.mydomain.com'
 const siteName = "factuWeb"
 const contactEmail = "info@factuWeb.com"

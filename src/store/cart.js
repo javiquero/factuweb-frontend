@@ -1,3 +1,4 @@
+import { listen } from 'svelte/internal';
 import { writable } from 'svelte/store';
 import { get, post } from "./../lib/api";
 
@@ -15,7 +16,6 @@ function getCart() {
             }
             catch (e) { }
         },
-
 		set: async (payload) => {
             try {
 				const data = await post("cart/set", payload);
@@ -25,6 +25,20 @@ function getCart() {
             catch (e) {
                 throw e
             }
+		},
+		setList: (list) => {
+			return new Promise(async (resolve, reject) =>{
+				try {
+					for (let i = 0; i < list.length; i++) {
+						const data = await post("cart/set", list[i]);
+						set(data);
+					}
+					return resolve()
+				}
+				catch (e) {
+					return reject(e)
+				}
+			});
 		},
 		del: async () => {
             try {

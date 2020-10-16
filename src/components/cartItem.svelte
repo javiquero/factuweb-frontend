@@ -7,7 +7,7 @@
 	</div>
 		<div style="width: 167px; display:inline-block">
 			<div class="cart-item-description">{item.DESART}</div>
-			<div  class="ref ">{item.CODART}</div>
+			<div class="ref ">{item.CODART}</div>
 		</div>
 
 		<div style="width: 173px; display:inline-block">

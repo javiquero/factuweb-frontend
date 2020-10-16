@@ -1,51 +1,43 @@
-import { Url } from './../config'
+import { Url } from '@/config'
 import Cookie from 'cookie-universal'
 const cookies = Cookie()
 
 async function send({ method, path, data, token, cookie }) {
 	return new Promise(async (resolve, reject) => {
+		// console.log( method + "://api/" + path  );
 		const fetch = process.browser ? window.fetch : require('node-fetch').default;
 		const opts = {
 			method, headers: {
 				'Accept': 'application/json, text/plain, */*',
 				'Content-Type': 'application/json',
 				'Cache': 'no-cache',
-				'cookie': cookie
+				'cookie': cookie||cookies
 			},
 			credentials: 'include',
 			mode: 'cors'
 		};
-
+		// console.log(cookies.getAll());
 		if (data)
 			opts.body = JSON.stringify(data);
 
 
-		let tkn = cookies.get('fw-token');
-
-		if (token) {
-			opts.headers['Authorization'] = `Bearer ${token}`;
-		} else if (tkn) {
-			opts.headers['Authorization'] = `Bearer ${tkn}`;
-		}
-		// else {
-		// 	console.log ("Path",path);
-		// 	console.log ("OPTS",opts);
-		// 	console.log ("tkn",tkn);
-		// 	console.log ("token",token);
-		// }
+		if (!token) token = cookies.get('fw-token');
+		// console.log("tkn",path,"|",tkn,"|", token);
+		if (token) 	opts.headers['Authorization'] = `Bearer ${token}`;
 
 		try {
 			// console.log(`${Url}/api/${path}`);
 			let response = await fetch(`${Url}/api/${path}`, opts)
 
 			if (response.status == 403) {
-				console.log("RESPONSE 403");
+				// console.log("RESPONSE 403");
 				cookies.set('fw-token', null)
 				cookies.set('fw-data', null)
 				// cookies.remove('fw-token');
 				// cookies.remove('fw-data');
 			}
-
+// console.log(await response.json())
+			// if (response.url.search("download/search") > 0) return resolve( response.blob());
 			let json = await response.text()
 			if (!response.ok) {
 				return reject(json)
@@ -64,9 +56,6 @@ async function send({ method, path, data, token, cookie }) {
 };
 
 async function get(path, params, token, cookie) {
-	// var url = new URL("https://geo.example.org/api"),
-	// if (params)
-	// Object.keys(params).forEach(key => path.searchParams.append(key, params[key]))
 	return await send({ method: 'GET', path, params, token, cookie });
 }
 

@@ -1,14 +1,11 @@
 <script>
-	// export let fart = {}
-	export let CODART = ''
+ 	export let fart = {}
 
 	import AddCart from "./addCart.svelte";
 	import { formatCurrency } from './../lib/functions'
 
 	import { createEventDispatcher } from 'svelte';
 	const dispatch = createEventDispatcher();
-
-	import { fart } from "@/store/fart.js";
 	import { cart } from "@/store/cart.js";
 
 	import { stores } from "@sapper/app"
@@ -19,36 +16,37 @@
 
  	let qty = 0
 	let inCart = false;
-  	$:product = getProduct(CODART)
-	$:inCart = isInCart($cart, item)
 
-	function isInCart(x,i){
+  	$:product = getProduct()
+	$:inCart = isInCart($cart, fart)
+
+	function isInCart(x, i){
 		let found = x.items.find(element => element.CODART == i.CODART);
 		if (!found ) return false;
 		return true;
 	}
 	function onSelect(){
-		 dispatch('select', item);
+		 dispatch('select', fart);
 	}
 
 	async function getProduct(value) {
-		return new Promise(async (resolve, reject) =>{
-			item = await fart.getCode(value);
-			return resolve(item);
-		})
 		// return new Promise(async (resolve, reject) =>{
-		// 	// if (fart != {} && fart != undefined) return resolve (fart);
-		// 	if (Object.keys(fart).length > 0 && fart.constructor === Object) return resolve (fart);
+		// 	item = await fart.getCode(value);
+		// 	return resolve(item);
+		// })
+		return new Promise(async (resolve, reject) =>{
+			// if (fart != {} && fart != undefined) return resolve (fart);
+			if (Object.keys(fart).length > 0 && fart.constructor === Object) return resolve (fart);
 
-		// 	// try {
-		// 	// 	data = await get(`fart/${CODART}"`,"",$session.token);
-		// 	// 	if (data && data.length > 0) response = data[0]
-		// 	// 	return resolve (data);
-		// 	// } catch (e) {
-		// 	// 	console.error("Load section - ", e);
-		// 	// 	return reject (e)
-		// 	// }
-		// });
+			// try {
+			// 	data = await get(`fart/${CODART}"`,"",$session.token);
+			// 	if (data && data.length > 0) response = data[0]
+			// 	return resolve (data);
+			// } catch (e) {
+			// 	console.error("Load section - ", e);
+			// 	return reject (e)
+			// }
+		});
 	}
 
   let showCant = false
@@ -77,17 +75,24 @@
 					</div>
 					<div class="row" on:click="{onSelect}">
 						<div class="col pl-2 pr-2 mb-2">
-						<div  class="ref bold">{product.CODART}</div>
+							<div  class="ref bold">{product.CODART}</div>
+							{#if product.CE1ART != ""}
+								<div  class="mod bold">Modelo: {product.CE1ART}</div>
+							{/if}
 						</div>
+
+
+
 					</div>
 					<div class="row" on:click="{onSelect}">
 						<div class="col col-xs-6 pl-2 pr-1">
 							<div class="thumb-image media text-center">
 								<img
-								src="/api/image/150/{product.CODART}"
-								alt="Imagen de la referéncia {product.CODART}"
+								src="/api/image/150/{product.IMGART}"
+								alt="Imagen de la referéncia {product.CODART}{product.CE1ART!="" ? " modelo " + product.CE1ART: ""}"
 								style="width:90%;"
 								class="align-self-center mr-3" />
+
 							</div>
 						</div>
 						<div class="col col-xs-6 pl-1 pr-2" on:click="{onSelect}">
@@ -177,8 +182,18 @@
     .ref {
       display: inline-block;
       font-family: roboto, serif;
-      background: #103f74;
       background-color: #ff2300;
+      padding: 0.2rem 0.8rem;
+      border-radius: 3px;
+      color: #fff;
+      font-weight: 600;
+      padding-top: 4px;
+    }
+
+	.mod {
+      display: inline-block;
+      font-family: roboto, serif;
+      background-color: #28a745;
       padding: 0.2rem 0.8rem;
       border-radius: 3px;
       color: #fff;

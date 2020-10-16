@@ -75,17 +75,24 @@
 					</div>
 					<div class="row" on:click="{onSelect}">
 						<div class="col pl-2 pr-2 mb-2">
-						<div  class="ref bold">{product.CODART}</div>
+							<div  class="ref bold">{product.CODART}</div>
+							{#if product.CE1ART != ""}
+								<div  class="mod bold">Modelo: {product.CE1ART}</div>
+							{/if}
 						</div>
+
+
+
 					</div>
 					<div class="row" on:click="{onSelect}">
 						<div class="col col-xs-6 pl-2 pr-1">
 							<div class="thumb-image media text-center">
 								<img
-								src="/api/image/150/{product.CODART}"
-								alt="Imagen de la referéncia {product.CODART}"
+								src="/api/image/150/{product.IMGART}"
+								alt="Imagen de la referéncia {product.CODART}{product.CE1ART!="" ? " modelo " + product.CE1ART: ""}"
 								style="width:90%;"
 								class="align-self-center mr-3" />
+
 							</div>
 						</div>
 						<div class="col col-xs-6 pl-1 pr-2" on:click="{onSelect}">
@@ -175,8 +182,18 @@
     .ref {
       display: inline-block;
       font-family: roboto, serif;
-      background: #103f74;
       background-color: #ff2300;
+      padding: 0.2rem 0.8rem;
+      border-radius: 3px;
+      color: #fff;
+      font-weight: 600;
+      padding-top: 4px;
+    }
+
+	.mod {
+      display: inline-block;
+      font-family: roboto, serif;
+      background-color: #28a745;
       padding: 0.2rem 0.8rem;
       border-radius: 3px;
       color: #fff;

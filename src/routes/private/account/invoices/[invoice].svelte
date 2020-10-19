@@ -119,9 +119,9 @@
 						<button class="btn btn-fw btn-light btn-block"  type="button" on:click={addAllToCart}>
 							Añadir todo al carro <i style="float: right; line-height: 22px;" class="fal fa-shopping-basket"></i>
 						</button>
-						<button class="btn btn-fw btn-light btn-block" disabled type="button" >
+						<a target="_blank" href="/api/invoice/pdf/{YEAR}/{TIPFAC}/{CODFAC}" class="btn btn-fw btn-light btn-block"  role="button" >
 							Ver Pdf <i style="float: right; line-height: 22px;" class="fal fa-file-invoice"></i>
-						</button>
+						</a>
 					</div>
 				</div>
 			</div>

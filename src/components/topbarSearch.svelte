@@ -9,9 +9,7 @@
 
 // import { post } from "@/lib/api";
 import { goto, stores } from "@sapper/app";
-
 export let value = '';
-
 import { onMount } from 'svelte';
 
 onMount(() => {
@@ -25,6 +23,7 @@ Array.from(document.getElementsByClassName("inputsearch")).forEach(
 				if (keyCode == '13'){
 					if (value.length<3) return e.preventDefault();
 					goto("/private/search?q="+value);
+					value="";
 					// Enter pressed
 					return false;
 				}

@@ -90,8 +90,8 @@
 								<img
 								src="/api/image/150/{product.IMGART}"
 								alt="Imagen de la referéncia {product.CODART}{product.CE1ART!="" ? " modelo " + product.CE1ART: ""}"
-								style="width:90%;"
-								class="align-self-center mr-3" />
+								style="width:90%; margin-left:5%"
+								class="align-self-center " />
 
 							</div>
 						</div>

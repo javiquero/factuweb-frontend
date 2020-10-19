@@ -17,18 +17,9 @@
 
 	const { session } = stores()
 
-
 	let page = 1;
 	let perPage= 100;
-
-
-	// let remoteData= [];
-	// $:remoteData = getRemoteData()
-
-	// let remoteSections= [];
-	// $:remoteSections = getSections()
-
-let items = [];
+	let items = [];
 	let data = undefined;
 	$: data= getData()
 
@@ -49,7 +40,6 @@ let items = [];
 						}));
 					}));
 				}));
-				console.log(d);
 				return resolve(d)
 			} catch (error) {
 				console.error(error);
@@ -94,8 +84,6 @@ let items = [];
   <title>{siteName} </title>
 </svelte:head>
 <main>
-
-
 	<section class="items-section">
 	<!-- <div class="container-fluid"> -->
 		<div class="container-fluid">

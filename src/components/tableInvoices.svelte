@@ -111,7 +111,7 @@
 			<p class="mb-0">Recargue la página y si el problema persiste contacte con {contactEmail}.</p>
 		</div>
 	{/await}
-	{#if max!=undefined && invoices && invoices.length > 0}
+	{#if max!=100000 && invoices && invoices.length > 0}
 		<a class="sub-link" href="/private/account/invoices">Ver todas mis facturas</a>
 	{/if}
 </section>

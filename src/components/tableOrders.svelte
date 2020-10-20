@@ -108,7 +108,7 @@
 			<p class="mb-0">Recargue la página y si el problema persiste contacte con {contactEmail}.</p>
 		</div>
 	{/await}
-	{#if max!=undefined && orders && orders.length > 0}
+	{#if max!=100000 && orders && orders.length > 0}
 		<a class="sub-link" href="/private/account/orders">Ver todos mis pedidos</a>
 	{/if}
 </section>

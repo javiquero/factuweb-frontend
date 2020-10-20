@@ -17,6 +17,7 @@
 	import { auth } from "./../store/auth.js";
 	import TopbarCart from "./../components/topbarCart.svelte";
 	import TopbarSearch from "./../components/topbarSearch.svelte";
+	import Footer from "./../components/footer.svelte";
 
 	let searchText ="";
 
@@ -94,7 +95,7 @@
 	{/if}
   <slot />
 </div>
-
+<Footer></Footer>
 
 <style  lang="scss">
 .topnavbar {
@@ -159,7 +160,8 @@
 	padding: 5px 0;
 }
 .pageContent{
-	height:100%;
+	// height:100%;
+	min-height: 80%;
 	padding-top: 62px;
 }
 

@@ -23,11 +23,17 @@
 		});
 	}
 
+	let promise = undefined;
+	function clickSendEmail() {
+		promise = sendEmail();
+	}
 	async function sendEmail(){
 		return new Promise(async (resolve, reject) => {
 			try {
 				let resp = await post(`email/send`,{body: body, subject: subject} ,$session.token);
-				return resolve(info);
+				body = "";
+				subject = "";
+				return resolve();
 			} catch (e) {
 				return reject(e);
 			}
@@ -58,7 +64,9 @@
 								<hr>
 								<div class=" text-responsive" >
 									<div>{info.agent.NOMAGE||''}</div>
-									<div> {info.agent.TEMAGE? 'Tel.' + info.agent.TEMAGE:''}</div>
+									{#if info.agent.TEMAGE && info.agent.TEMAGE!=""}
+										<a href="tel: {info.agent.TEMAGE}"> Tel: {info.agent.TEMAGE}</a>
+									{/if}
 									<div>{info.agent.EMAAGE||''} </div>
 								</div>
 							</div>
@@ -105,9 +113,15 @@
 
 			<div class="row ">
 				<div class="col offset-lg-8 align-self-end">
-					<button class="btn btn-fw btn-lg btn-block" on:click="{sendEmail}" type="button" >
-							Enviar  <i style="line-height: 22px;" class="fal fa-paper-plane ml-2"></i>
+				{#await promise}
+						<button class="btn btn-fw btn-lg btn-block" on:click="" type="button" disabled >
+							Enviando  <i style="line-height: 22px;" class="fal fa-paper-plane ml-2"></i>
 						</button>
+				{:then info}
+					<button class="btn btn-fw btn-lg btn-block" on:click="{clickSendEmail}" type="button" >
+							Enviar  <i style="line-height: 22px;" class="fal fa-paper-plane ml-2"></i>
+					</button>
+				{/await}
 				</div>
 			</div>
 

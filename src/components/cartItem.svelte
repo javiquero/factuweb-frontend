@@ -1,6 +1,6 @@
 <li class="cart-item">
 	<div style="width: 110px;  display:inline-block">
-		<img src="/api/image/150/{item.CODART}"
+		<img src="/api/image/150/{item.IMGART}"
 		alt="Imagen de la referéncia {item.CODART}"
 		style="width:100px;"
 		class="align-self-center" />
@@ -8,6 +8,9 @@
 		<div style="width: 167px; display:inline-block">
 			<div class="cart-item-description">{item.DESART}</div>
 			<div class="ref ">{item.CODART}</div>
+			{#if item.CE1ART != "" && item.CE1ART != undefined}
+				<div class="mod">Modelo: {item.CE1ART}</div>
+			{/if}
 		</div>
 
 		<div style="width: 173px; display:inline-block">
@@ -96,5 +99,16 @@ function prevent(event){
 			font-weight: bold;
 			padding-top: 4px;
 		}
+
+		.mod {
+			display: inline-block;
+			font-family: roboto, serif;
+			background-color: #28a745;
+			padding: 0.2rem 0.8rem;
+			border-radius: 3px;
+			color: #fff;
+			font-weight: bold;
+			padding-top: 4px;
+			}
 	}
 </style>

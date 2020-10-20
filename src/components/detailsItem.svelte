@@ -32,7 +32,9 @@
 						<div class="row">
 							<div class="col pl-2 pr-2 mb-2">
 								<div class="ref bold">{fart.CODART}</div>
-                				<div class="ean bold">{fart.EANART}</div>
+								{#if fart.EANART != ""}
+                					<div class="ean bold">{fart.EANART}</div>
+								{/if}
 								{#if fart.CE1ART != ""}
 									<div class="mod bold">Modelo: {fart.CE1ART}</div>
 								{/if}
@@ -99,8 +101,12 @@
 											Información
 										</div>
 										<div style="line-height: 1.3; font-size: 14px;">
-											<div>Size: <span class="bold">{fart.DIMART} </span></div>
-											<div>Peso: <span class="bold">{fart.PESART}</span></div>
+											{#if fart.DIMART != ""}
+												<div>Size: <span class="bold">{fart.DIMART} </span></div>
+											{/if}
+											{#if fart.PESART != ""}
+												<div>Peso: <span class="bold">{fart.PESART}</span></div>
+											{/if}
 										</div>
 
 									</div>
@@ -127,12 +133,16 @@
 								</div>
 								<div class="despcritions pl-4" >
 									<div class="mt-3 ">
-										<span class="title">Descripción:</span> <br>
-										{fart.DEWART || fart.DLAART}
+										{#if fart.DEWART != ""  ||  fart.DLAART != ""}
+											<span class="title">Descripción:</span> <br>
+											{fart.DEWART || fart.DLAART}
+										{/if}
 									</div>
 									<div class="mt-3" style="white-space: pre-wrap;">
-										<span class="title">Características:</span> <br>
-										{`${fart.OBSART}`}
+										{#if fart.OBSART != ""}
+											<span class="title">Características:</span> <br>
+											{`${fart.OBSART}`}
+										{/if}
 									</div>
 								</div>
 

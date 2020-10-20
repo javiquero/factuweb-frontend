@@ -18,7 +18,7 @@
 		}
 	};
 	function getInCart(x){
-		let found = x.items.find(element => element.CODART == fart.CODART);
+		let found = x.items.find(element => element.CODART == fart.CODART && element.CE1ART == fart.CE1ART);
 		if (!found ) return 0;
 		showCant=true;
 		return found.qty;

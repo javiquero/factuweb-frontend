@@ -3,17 +3,30 @@
 <script>
 	import Precard from "@/components/preCard.svelte";
 	import { siteName, contactEmail } from "@/config";
-	import { get } from "@/lib/api";
+	import { get, post } from "@/lib/api";
 	import { formatDate, formatCurrency} from "@/lib/functions";
 	import { stores } from "@sapper/app";
 	const { session} = stores();
 
 	let info = {};
+	let body="";
+	let subject ="";
 
 	async function getAgent() {
 		return new Promise(async (resolve, reject) => {
 			try {
 				info = await get(`client/agent`,undefined ,$session.token);
+				return resolve(info);
+			} catch (e) {
+				return reject(e);
+			}
+		});
+	}
+
+	async function sendEmail(){
+		return new Promise(async (resolve, reject) => {
+			try {
+				let resp = await post(`email/send`,{body: body, subject: subject} ,$session.token);
 				return resolve(info);
 			} catch (e) {
 				return reject(e);
@@ -74,7 +87,7 @@
 				<div class="col-12 col-md-6">
 					<div class="form-group">
 						<label for="exampleInputEmail1">Asunto</label>
-						<input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+						<input type="email" bind:value={subject} class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
 						<small class="form-text text-muted">(Opcional) Breve introdcción.</small>
 					</div>
 				</div>
@@ -84,7 +97,7 @@
 				<div class="col-12">
 					<div class="form-group">
 						<label for="exampleFormControlTextarea1">Mensaje</label>
-						<textarea class="form-control" id="exampleFormControlTextarea1" rows="10"></textarea>
+						<textarea bind:value={body} class="form-control" id="exampleFormControlTextarea1" rows="10"></textarea>
 						<small class="form-text text-muted">Cuerpo del mensaje.</small>
 					</div>
 				</div>
@@ -92,7 +105,7 @@
 
 			<div class="row ">
 				<div class="col offset-lg-8 align-self-end">
-					<button class="btn btn-fw btn-lg btn-block" type="button" >
+					<button class="btn btn-fw btn-lg btn-block" on:click="{sendEmail}" type="button" >
 							Enviar  <i style="line-height: 22px;" class="fal fa-paper-plane ml-2"></i>
 						</button>
 				</div>

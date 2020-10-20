@@ -21,7 +21,7 @@
 	$:inCart = isInCart($cart, fart)
 
 	function isInCart(x, i){
-		let found = x.items.find(element => element.CODART == i.CODART);
+		let found = x.items.find(element => element.CODART == i.CODART && element.CE1ART == i.CE1ART );
 		if (!found ) return false;
 		return true;
 	}
@@ -147,9 +147,9 @@
 
 
 <style lang="scss">
-.incart{
-	background-color: aliceblue; //linen
-}
+	.incart{
+		background-color: aliceblue; //linen
+	}
   .fw-card-body {
     padding-top: 5px;
   }

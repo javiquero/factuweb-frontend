@@ -123,7 +123,7 @@
 									<div class="thumb-image media text-center">
 									{#if line.CODART && line.qty}
 										<img
-										src="/api/image/150/{line.CODART}"
+										src="/api/image/150/{line.IMGART}"
 										alt="Imagen de la referéncia {line.CODART}"
 										style="width:90%;"
 										class="align-self-center mr-0" />
@@ -131,7 +131,12 @@
 									</div>
 								</td>
 								<td>{line.CODART}</td>
-								<td>{line.DESART}</td>
+								<td>
+									{#if line.CE1ART != "" && line.CE1ART != undefined}
+										<div class="mod">{line.CE1ART}</div>
+									{/if}
+									{line.DESART}
+								</td>
 								<td class="text-right">{#if line.price}{formatCurrency(line.price.clientPrice)}{/if}</td>
 								<td class="text-right"><AddCart fart="{line}"  showCant="{true}"/></td>
 								<td class="text-right">{totLine(line)}</td>
@@ -172,6 +177,16 @@
 	.table td, .table th {
 		padding: 5px ;
 		vertical-align: middle;
+		.mod {
+			display: inline-block;
+			font-family: roboto, serif;
+			background-color: #28a745;
+			padding: 0.2rem 0.8rem;
+			border-radius: 3px;
+			color: #fff;
+			font-weight: bold;
+			padding-top: 4px;
+			}
 	}
 
 </style>

@@ -9,7 +9,7 @@
 
 	function onChangeItems(i){
 		if ( selected==undefined ) return;
-		let found = i.findIndex(element => (element.CODART == selected.CODART && element.idx == selected.idx));
+		let found = i.findIndex(element => (element.CODART == selected.CODART && element.CE1ART == selected.CE1ART && element.idx == selected.idx));
 		if (found<0){
 			hideModal();
 		}
@@ -36,7 +36,7 @@
 	function handleKeydown(event) {
 		if (selected!=undefined){
 			if (event.key == "ArrowRight"){
-				let found = items.findIndex(element => (element.CODART == selected.CODART && element.idx == selected.idx));
+				let found = items.findIndex(element => (element.CODART == selected.CODART && element.CE1ART == selected.CE1ART && element.idx == selected.idx));
 				if (found>-1){
 					if (found < items.length-1){
 						selected = items[found+1];
@@ -47,7 +47,7 @@
 					hideModal()
 				}
 			}else if (event.key == "ArrowLeft"){
-				let found = items.findIndex(element => (element.CODART == selected.CODART && element.idx == selected.idx));
+				let found = items.findIndex(element => (element.CODART == selected.CODART && element.CE1ART == selected.CE1ART && element.idx == selected.idx));
 				if (found>-1){
 					if (found > 0){
 						selected = items[found-1];

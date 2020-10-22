@@ -7,42 +7,32 @@
 
 <script>
 
-// import { post } from "@/lib/api";
-import { goto, stores } from "@sapper/app";
-export let value = '';
-import { onMount } from 'svelte';
+	import { goto, stores } from "@sapper/app";
+	export let value = '';
+	import { onMount } from 'svelte';
+	const { session } = stores()
 
-onMount(() => {
-
-
-Array.from(document.getElementsByClassName("inputsearch")).forEach(
-    function(element, index, array) {
-        element.onkeypress = function(e){
-			if (!e) e = window.event;
-				var keyCode = e.keyCode || e.which;
-				if (keyCode == '13'){
-					if (value.length<3) return e.preventDefault();
-					goto("/private/search?q="+value);
-					value="";
-					// Enter pressed
-					return false;
+	onMount(() => {
+		Array.from(document.getElementsByClassName("inputsearch")).forEach(
+			function(element, index, array) {
+				element.onkeypress = function(e){
+					if (!e) e = window.event;
+						var keyCode = e.keyCode || e.which;
+						if (keyCode == '13'){
+							if (value.length<3) return e.preventDefault();
+							if ($session.token)
+								goto("/private/search?q="+value);
+							else{
+								goto("/search?q="+value);
+							}
+							value="";
+							// Enter pressed
+							return false;
+						}
 				}
-		}
-    }
-);
-
-		// document.getElementById('inputsearch').onkeypress = function(e){
-		// 	if (!e) e = window.event;
-		// 	var keyCode = e.keyCode || e.which;
-		// 	if (keyCode == '13'){
-		// 		if (value.length<3) return e.preventDefault();
-		// 		goto("/private/search?q="+value);
-		// 	// Enter pressed
-		// 	return false;
-		// 	}
-		// }
-
-  })
+			}
+		);
+})
 </script>
 
 <style lang="scss">

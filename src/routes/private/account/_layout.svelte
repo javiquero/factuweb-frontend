@@ -7,6 +7,7 @@
 <script>
 		import { stores	} from "@sapper/app";
 		const { session, preloading } = stores();
+		import { showOrders,showInvoices } from "@/config";
 		export let segment
 </script>
 
@@ -23,8 +24,12 @@
 							</a>
 							<a type="button" class="list-group-item list-group-item-action btn-secondary" href="/private/account/address" class:active={segment === "address"}>Mis direcciones</a>
 							<a type="button" class="list-group-item list-group-item-action btn-secondary" href="/private/account/items" class:active={segment === "items"}>Artículos consumidos</a>
-							<a type="button" class="list-group-item list-group-item-action btn-secondary" href="/private/account/orders" class:active={segment === "orders"}>Mis pedidos</a>
-							<a type="button" class="list-group-item list-group-item-action btn-secondary" href="/private/account/invoices" class:active={segment === "invoices"}>Mis facturas</a>
+							{#if showOrders==true}
+								<a type="button" class="list-group-item list-group-item-action btn-secondary" href="/private/account/orders" class:active={segment === "orders"}>Mis pedidos</a>
+							{/if}
+							{#if showInvoices==true}
+								<a type="button" class="list-group-item list-group-item-action btn-secondary" href="/private/account/invoices" class:active={segment === "invoices"}>Mis facturas</a>
+							{/if}
 							<a type="button" class="list-group-item list-group-item-action btn-secondary" href="/private/account/agent" class:active={segment === "agent"}>Contacto comercial</a>
 						</div>
 					</div>

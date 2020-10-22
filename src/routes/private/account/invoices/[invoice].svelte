@@ -15,24 +15,22 @@
 <script>
 	import Pretable from "@/components/preTable.svelte";
 	import Pretext from "@/components/preText.svelte";
-	import { siteName, contactEmail } from "@/config";
+	import { siteName, contactEmail, showPriceInInvoices } from "@/config";
 	import ModalDetails from "@/components/modalDetails.svelte";
-
 	import { formatDate, formatCurrency} from "@/lib/functions";
 	import { get } from "@/lib/api";
 	import { stores } from "@sapper/app";
 	import { cart } from "@/store/cart.js";
-	const { session} = stores();
 
+	const { session} = stores();
 	let invoice = [];
 	let items=[];
-
-	let title = "Detalle de factura";
+	const title = "Detalle de factura";
 	export let YEAR=undefined;
 	export let TIPFAC=undefined;
 	export let CODFAC=undefined;
-
 	let lineSelected = undefined;
+
 	function onSelectLine(line){
 		if (line.info.CODART && line.info.IMGART ){
 			lineSelected= line.info;
@@ -119,9 +117,11 @@
 						<button class="btn btn-fw btn-light btn-block"  type="button" on:click={addAllToCart}>
 							Añadir todo al carro <i style="float: right; line-height: 22px;" class="fal fa-shopping-basket"></i>
 						</button>
-						<a target="_blank" href="/api/invoice/pdf/{YEAR}/{TIPFAC}/{CODFAC}" class="btn btn-fw btn-light btn-block"  role="button" >
-							Ver Pdf <i style="float: right; line-height: 22px;" class="fal fa-file-invoice"></i>
-						</a>
+						{#if showPriceInInvoices==true}
+							<a target="_blank" href="/api/invoice/pdf/{YEAR}/{TIPFAC}/{CODFAC}" class="btn btn-fw btn-light btn-block"  role="button" >
+								Ver Pdf <i style="float: right; line-height: 22px;" class="fal fa-file-invoice"></i>
+							</a>
+						{/if}
 					</div>
 				</div>
 			</div>
@@ -132,9 +132,13 @@
 						<th scope="col"></th>
 						<th scope="col">Artículo</th>
 						<th scope="col">Descripción</th>
-						<th scope="col">Precio</th>
+						{#if showPriceInInvoices==true}
+							<th scope="col">Precio</th>
+						{/if}
 						<th scope="col">Cantidad</th>
-						<th scope="col">Total</th>
+						{#if showPriceInInvoices==true}
+							<th scope="col">Total</th>
+						{/if}
 					</tr>
 				</thead>
 				<tbody>
@@ -155,9 +159,13 @@
 									</td>
 									<td>{line.ARTLFA}</td>
 									<td>{line.DESLFA}</td>
-									<td>{line.CANLFA!=0?formatCurrency(line.PRELFA):''}</td>
+									{#if showPriceInInvoices==true}
+										<td>{line.CANLFA!=0?formatCurrency(line.PRELFA):''}</td>
+									{/if}
 									<td class="text-center">{line.CANLFA!=0?line.CANLFA:''}</td>
-									<td>{line.CANLFA!=0?formatCurrency(line.TOTLFA):''}</td>
+									{#if showPriceInInvoices==true}
+										<td>{line.CANLFA!=0?formatCurrency(line.TOTLFA):''}</td>
+									{/if}
 								</tr>
 
 						{/each}

@@ -1,6 +1,7 @@
-import { Url } from '@/config'
 import Cookie from 'cookie-universal'
+import { PORT} from '@/config';
 const cookies = Cookie()
+
 
 async function send({ method, path, data, token, cookie }) {
 	return new Promise(async (resolve, reject) => {
@@ -26,28 +27,27 @@ async function send({ method, path, data, token, cookie }) {
 		if (token) 	opts.headers['Authorization'] = `Bearer ${token}`;
 
 		try {
-			// console.log(`${Url}/api/${path}`);
+			let Url = "";
+			if (typeof window === "undefined") {
+				Url = "http://localhost:" + PORT;;
+			} else {
+				Url = window.location.origin;
+			}
 			let response = await fetch(`${Url}/api/${path}`, opts)
-
 			if (response.status == 403) {
-				// console.log("RESPONSE 403");
 				cookies.set('fw-token', null)
 				cookies.set('fw-data', null)
-				// cookies.remove('fw-token');
-				// cookies.remove('fw-data');
 			}
-// console.log(await response.json())
-			// if (response.url.search("download/search") > 0) return resolve( response.blob());
 			let json = await response.text()
 			if (!response.ok) {
-				return reject(json)
-				// throw json
+				return reject(json);
 			}
 			try {
 				return resolve(JSON.parse(json));
 			} catch (e) {
 				return reject(json);
 			}
+
 		}
 		catch (e) {
 			return reject(e);

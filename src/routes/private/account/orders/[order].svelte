@@ -16,7 +16,7 @@
 	import Pretable from "@/components/preTable.svelte";
 	import Pretext from "@/components/preText.svelte";
 	import ModalDetails from "@/components/modalDetails.svelte";;
-	import { siteName, contactEmail } from "@/config";
+	import { siteName, contactEmail, showPriceInOrders } from "@/config";
 	import { formatDate, formatCurrency} from "@/lib/functions";
 	import { get } from "@/lib/api";
 	import { cart } from "@/store/cart.js";
@@ -112,9 +112,11 @@
 						<button class="btn btn-fw btn-light btn-block"  type="button" on:click={addAllToCart}>
 							Añadir todo al carro <i style="float: right; line-height: 22px;" class="fal fa-shopping-basket"></i>
 						</button>
-						<a target="_blank" href="/api/order/pdf/{YEAR}/{TIPPCL}/{CODPCL}" class="btn btn-fw btn-light btn-block"  role="button" >
-							Ver Pdf <i style="float: right; line-height: 22px;" class="fal fa-file-invoice"></i>
-						</a>
+						{#if showPriceInOrders==true}
+							<a target="_blank" href="/api/order/pdf/{YEAR}/{TIPPCL}/{CODPCL}" class="btn btn-fw btn-light btn-block"  role="button" >
+								Ver Pdf <i style="float: right; line-height: 22px;" class="fal fa-file-invoice"></i>
+							</a>
+						{/if}
 					</div>
 				</div>
 			</div>
@@ -126,9 +128,13 @@
 						<th scope="col">Artículo</th>
 						<th scope="col">Descripción</th>
 						<th scope="col">Estado</th>
-						<th scope="col">Precio</th>
+						{#if showPriceInOrders==true}
+							<th scope="col">Precio</th>
+						{/if}
 						<th scope="col">Cantidad</th>
-						<th scope="col">Total</th>
+						{#if showPriceInOrders==true}
+							<th scope="col">Total</th>
+						{/if}
 					</tr>
 				</thead>
 				<tbody>
@@ -149,9 +155,13 @@
 								<td>{line.ARTLPC}</td>
 								<td>{line.DESLPC}</td>
 								<td>{#if line.CANLPC}{line.PENLPC>0? line.PENLPC + ' Pendientes': 'Entregados'}{/if}</td>
-								<td>{#if line.CANLPC}{formatCurrency(line.PRELPC)}{/if}</td>
+								{#if showPriceInOrders==true}
+									<td>{#if line.CANLPC}{formatCurrency(line.PRELPC)}{/if}</td>
+								{/if}
 								<td class="text-center">{#if line.CANLPC}{line.CANLPC}{/if}</td>
-								<td>{#if line.CANLPC}{formatCurrency(line.TOTLPC)}{/if}</td>
+								{#if showPriceInOrders==true}
+									<td>{#if line.CANLPC}{formatCurrency(line.TOTLPC)}{/if}</td>
+								{/if}
 							</tr>
 								<!-- {:else}
 								<tr style="line-height:70px;height:70px;" >

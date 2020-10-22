@@ -1,10 +1,11 @@
-import { listen } from 'svelte/internal';
+// import { listen } from 'svelte/internal';
 import { writable } from 'svelte/store';
 import { get, post } from "./../lib/api";
 
 function getCart() {
     const { subscribe, set } = writable({
-        items: []
+		items: [],
+		outOfCart:[]
     });
     return {
         subscribe,

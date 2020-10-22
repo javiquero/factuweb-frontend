@@ -7,7 +7,7 @@
 </script>
 
 <script>
-	import HbarSections from "./_hbarSections.svelte";
+	// import HbarSections from "@/components/hbarSections.svelte";
 </script>
 
 <style>
@@ -18,7 +18,7 @@
   	}
 </style>
 
-<HbarSections />
+<!-- <HbarSections /> -->
 <div class="pageContent">
 	<slot />
 </div>

@@ -43,7 +43,7 @@ async function authenticationMiddleware(req, res, next) {
             cookies.remove('fw-token')
             cookies.remove('fw-data');
 
-            if (req.path!="/login" && req.path!="/"){
+            if (req.path.substr(0, 8)=="/private"){
                 res.statusCode= 302;
                 res.setHeader('Location', '/login');
                 res.end();

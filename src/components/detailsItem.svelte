@@ -3,6 +3,10 @@
 
 	import { formatCurrency } from './../lib/functions'
 	import AddCart from "./addCart.svelte";
+	import { showSpecialPrices } from "@/config.js";
+	import { stores } from "@sapper/app"
+	const { session } = stores()
+
 
 	let loadProduct = getProduct()
 	let qty =0;
@@ -42,12 +46,12 @@
 						</div>
 						<div class="row">
 							<div class="col-xl-8 col-lg-6 pl-2 pr-1">
-							<div class="thumb-image media text-center">
+							<div class="thumb-image media text-center" style="max-height:485px;height:100%;padding:10px;">
 										<img
 										src="/api/image/1024/{fart.IMGART}"
 										alt="Imagen de la referéncia  {fart.CODART}{fart.CE1ART!="" ? " modelo " + fart.CE1ART: ""}"
-										style="width:100%;"
-										class="align-self-center mr-0" />
+										style="max-width:100%;max-height:100%; margin-left: auto;margin-right: auto;display: block;"
+										class="align-self-center " />
 									</div>
 								<!-- <div class="thumb-image media text-center " style="background-image: url('/api/image/1024/{fart.CODART}'); background-size: cover;    background-size: contain;    background-repeat: no-repeat;    background-position: center;">
 									<!-- <img
@@ -56,11 +60,13 @@
 									style="width:90%;"
 									class="align-self-center mr-3" /> --
 								</div> -->
-								<div style="position: absolute;bottom: 0px;">
-									<a href="/api/image/download/photo/{fart.IMGART}" class="btn btn-light btn-sm"  role="button" >
-										Descargar imagen
-									</a>
-								</div>
+								{#if $session.token}
+									<div style="position: absolute;bottom: 0px;">
+										<a href="/api/image/download/photo/{fart.IMGART}" class="btn btn-light btn-sm"  role="button" >
+											Descargar imagen
+										</a>
+									</div>
+								{/if}
 							</div>
 							<div class="col-xl-4 col-lg-6 pl-2 pr-2 ">
 								<div class="row">
@@ -84,7 +90,7 @@
 												</div>
 											{/if}
 
-											{#if fart.price && fart.price.dto > 0}
+											{#if fart.price && fart.price.dto > 0 && showSpecialPrices==true}
 												<div class="price brut">
 													Bruto:
 													<span class="bold">{formatCurrency(fart.price.price)}</span>
@@ -113,8 +119,9 @@
 								</div>
 
 								<div class="prices">
-									<!-- <div class="price-top">
-									{#if fart.price && fart.price.dto > 0}
+								{#if $session.token}
+									<div class="price-top">
+									{#if fart.price && fart.price.dto > 0 && showSpecialPrices==true}
 										<div class="price brut">
 											Precio bruto:
 											<span class="bold">{formatCurrency(fart.price.price)}</span>
@@ -124,12 +131,22 @@
 											<span class="bold">{fart.price.dto} %</span>
 										</div>
 									{/if}
-									</div> -->
+									</div>
 									<div class="price net bold">
-										<div>Precio neto</div>
-										{formatCurrency(fart.price?fart.price.clientPrice:0)}
+										{#if showSpecialPrices==true}
+											<div>Precio neto</div>
+											{formatCurrency(fart.price?fart.price.clientPrice:0)}
+										{:else}
+											<div>Precio</div>
+											{formatCurrency(fart.price?fart.price.price:0)}
+										{/if}
 									</div>
 									<AddCart fart={fart} showCant="{true}"></AddCart>
+									{:else}
+										<div class="price net bold">
+										Entra para ver los precios
+										</div>
+									{/if}
 								</div>
 								<div class="despcritions pl-4" >
 									<div class="mt-3 ">

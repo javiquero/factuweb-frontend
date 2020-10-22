@@ -5,11 +5,9 @@
 </script>
 
 <script>
-  	import { siteName } from "@/config";
+  	import { siteName, showOrders, showInvoices } from "@/config";
 	import TableOrders from "@/components/tableOrders.svelte"
 	import TableInvoices from "@/components/tableInvoices.svelte"
-
-
 </script>
 
 <svelte:head>
@@ -22,12 +20,16 @@
 
   <div class="row">
     <div class="col">
+	{#if showOrders==true}
       <TableOrders max="5" title="Mis últimos pedidos" ></TableOrders>
+	  {/if}
     </div>
   </div>
   <div class="row mt-5">
     <div class="col">
+	{#if showInvoices==true}
       <TableInvoices max="5" title="Mis últimas facturas" ></TableInvoices>
+	   {/if}
     </div>
 </div>
 

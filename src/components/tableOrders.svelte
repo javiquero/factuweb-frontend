@@ -22,7 +22,7 @@
 				await Promise.all(o.map(async (order) => {
 					order.PEND=0;
 					await Promise.all(order.lines.map(async (line) => {
-						order.PEND+=line.PENLPC;
+						order.PEND+=line.PENLPC>0?1:0;
 					}));
 				}));
 				return resolve (orders = o);
@@ -32,7 +32,6 @@
 			}
 		});
 	}
-
 </script>
 
 <style type="text/scss" lang="scss">

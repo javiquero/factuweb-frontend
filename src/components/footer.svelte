@@ -1,5 +1,6 @@
 <script>
-import { stores	} from "@sapper/app";
+	import { stores	} from "@sapper/app";
+	import { showOrders,showInvoices } from "@/config";
 	const {session} = stores();
 
 </script>
@@ -15,8 +16,12 @@ import { stores	} from "@sapper/app";
                 <ul >
                     <li><a href="/private/account/address">Mis direcciones</a></li>
                     <li><a href="/private/account/items">Artículos consumidos</a></li>
-                    <li><a href="/private/account/orders">Mis pedidos</a></li>
-                    <li><a href="/private/account/invoices">Mis facturas</a></li>
+					{#if showOrders==true}
+                    	<li><a href="/private/account/orders">Mis pedidos</a></li>
+					{/if}
+					{#if showInvoices==true}
+                    	<li><a href="/private/account/invoices">Mis facturas</a></li>
+					{/if}
                     <li><a href="/private/account/agent">Contacto comercial</a></li>
                 </ul>
 				{/if}

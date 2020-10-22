@@ -1,5 +1,7 @@
 <script>
  	export let fart = {}
+	import { stores } from "@sapper/app"
+	const { session } = stores()
 
 	import AddCart from "./addCart.svelte";
 	import { formatCurrency } from './../lib/functions'
@@ -8,12 +10,9 @@
 	const dispatch = createEventDispatcher();
 	import { cart } from "@/store/cart.js";
 
-	import { stores } from "@sapper/app"
-	const { session } = stores()
-
+	import { showSpecialPrices } from "@/config.js";
 
 	let item = {};
-
  	let qty = 0
 	let inCart = false;
 
@@ -21,6 +20,7 @@
 	$:inCart = isInCart($cart, fart)
 
 	function isInCart(x, i){
+		if (!$session.token) return false;
 		let found = x.items.find(element => element.CODART == i.CODART && element.CE1ART == i.CE1ART );
 		if (!found ) return false;
 		return true;
@@ -30,22 +30,8 @@
 	}
 
 	async function getProduct(value) {
-		// return new Promise(async (resolve, reject) =>{
-		// 	item = await fart.getCode(value);
-		// 	return resolve(item);
-		// })
 		return new Promise(async (resolve, reject) =>{
-			// if (fart != {} && fart != undefined) return resolve (fart);
-			if (Object.keys(fart).length > 0 && fart.constructor === Object) return resolve (fart);
-
-			// try {
-			// 	data = await get(`fart/${CODART}"`,"",$session.token);
-			// 	if (data && data.length > 0) response = data[0]
-			// 	return resolve (data);
-			// } catch (e) {
-			// 	console.error("Load section - ", e);
-			// 	return reject (e)
-			// }
+			if (Object.keys(fart).length > 0 && fart.constructor === Object) return resolve (fart);ct (e)
 		});
 	}
 
@@ -57,7 +43,7 @@
 
 <div class="fw-thumb-product">
 	<div class="card">
-		<div class="card-body fw-card-body  " class:incart="{inCart === true}">
+		<div class="card-body fw-card-body" class:incart="{inCart === true}">
 			{#await product}
 				<h3>Cargando... espera</h3>
 			{:then product}
@@ -80,19 +66,12 @@
 								<div  class="mod bold">Modelo: {product.CE1ART}</div>
 							{/if}
 						</div>
-
-
-
 					</div>
 					<div class="row" on:click="{onSelect}">
 						<div class="col col-xs-6 pl-2 pr-1">
-							<div class="thumb-image media text-center">
-								<img
-								src="/api/image/150/{product.IMGART}"
-								alt="Imagen de la referéncia {product.CODART}{product.CE1ART!="" ? " modelo " + product.CE1ART: ""}"
-								style="width:90%; margin-left:5%"
-								class="align-self-center " />
-
+							<div class="thumb-image media text-center"style="max-height:180px;height:180px;">
+								<img src="/api/image/150/{product.IMGART}" alt="Imagen de la referéncia {product.CODART}{product.CE1ART!="" ? " modelo " + product.CE1ART: ""}"
+								style="max-width:90%; max-height:90%; margin-left:5%;margin-left: auto;margin-right: auto;display: block;" class="align-self-center" />
 							</div>
 						</div>
 						<div class="col col-xs-6 pl-1 pr-2" on:click="{onSelect}">
@@ -116,27 +95,55 @@
 								{/if}
 							</div>
 							<div class="prices">
-								<div class="price-top">
-                					{#if product.price.dto>0}
-									  <div class="price brut">
-										  Precio bruto:
-										  <span class="bold">{formatCurrency(product.price.price)}</span>
-									  </div>
-										<div class="price remise">
-										  Descuento:
-										<span class="bold">{product.price.dto} %</span>
+								{#if $session.token}
+									<div class="price-top">
+										{#if product.price.dto>0 && showSpecialPrices==true}
+										<div class="price brut">
+											Precio bruto:
+											<span class="bold">{formatCurrency(product.price.price)}</span>
 										</div>
-									{/if}
-								</div>
+											<div class="price remise">
+											Descuento:
+											<span class="bold">{product.price.dto} %</span>
+											</div>
+										{/if}
+									</div>
+									<div class="price net bold">
+										{#if showSpecialPrices==true}
+											<div>Precio neto</div>
+											{formatCurrency(product.price.clientPrice)}
+										{:else}
+											<div>Precio</div>
+											{formatCurrency(product.price.price)}
+										{/if}
+									</div>
+								{:else}
+									{#if fart.DIMART != "" ||  fart.PESART != ""}
+								<div style="margin-top:-10px;margin-left: 15px; " >
+										<div style="border-bottom:1px solid #ccc; margin-bottom:5px;text-align: left; max-width:100px">
+											Información
+										</div>
+										<div style="line-height: 1.3; font-size: 14px;text-align: left;">
+											{#if fart.DIMART != ""}
+												<div>Size: <span class="bold">{fart.DIMART} </span></div>
+											{/if}
+											{#if fart.PESART != ""}
+												<div>Peso: <span class="bold">{fart.PESART}</span></div>
+											{/if}
+										</div>
 
-								<div class="price net bold">
-									<div>Precio neto</div>
-									{formatCurrency(product.price.clientPrice)}
-								</div>
+									</div>
+									<!-- <div class="price net bold">
+										Entra para ver precios
+									</div> -->
+									{/if}
+								{/if}
 							</div>
 						</div>
 					</div>
-					<AddCart fart="{product}"></AddCart>
+					{#if $session.token}
+						<AddCart fart="{product}"></AddCart>
+					{/if}
 				{/if}
 			{:catch error}
 				<p style="color: red">{error.message}</p>

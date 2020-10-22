@@ -21,7 +21,7 @@ FactuWeb consta de 3 partes. El frontend programado en Svelte, un backend, en es
 
 |            Contacto comercial             |           Detalles de pedidos            |            Histórico de pedidos            |            Página de bienvenida            |
 | :---------------------------------: | :----------------------------------: | :----------------------------------: | :----------------------------------: |
-| ![screenshot](https://raw.githubusercontent.com/javiquero/factuweb/master/images/img5.jpg) | ![screenshot](https://raw.githubusercontent.com/javiquero/factuweb/master/images/img6.jpg) | ![screenshot](https://raw.githubusercontent.com/javiquero/factuweb/master/images/img7.jpg) | ![screenshot](https://raw.githubusercontent.com/javiquero/factuweb/master/images/img8.jpg) |
+| ![screenshot](https://raw.githubusercontent.com/javiquero/factuweb/master/images/img5.jpg) | ![screenshot](https://raw.githubusercontent.com/javiquero/factuweb/master/images/img6.jpg) | ![screenshot](https://raw.githubusercontent.com/javiquero/factuweb/master/images/img7.jpg) | ![screenshot](https://raw.githubusercontent.com/javiquero/factuweb/master/images/img11.jpg) |
 <br>
 Programado en Svelte + sapper.
 <p align="center">

@@ -23,7 +23,7 @@
 		.main-logo{
 			background-image: url('/logo.svg');
 			height:180px;
-			background-size: 100px;
+			background-size: auto 150px;
 			background-position: top center;
 			background-repeat: no-repeat;
 		}
@@ -152,7 +152,7 @@
 	<section>
 		<div class="gmap_canvas">
 			<iframe id="gmap_canvas" title="" style="height: 500px;width:100%;"
-			src="https://maps.google.com/maps?q=Software%20DELSOL.&t=&z=18&ie=UTF8&iwloc=&output=embed" frameborder="0" scrolling="no"
+			src="https://maps.google.com/maps?q={[$session.info.NOMEMP, $session.info.DOMEMP, $session.info.NUMEMP, $session.info.POBEMP, $session.info.CPOEMP, $session.info.PROEMP].join(" ").replace(/\s/gi, "%20") }&t=&z=18&ie=UTF8&iwloc=&output=embed" frameborder="0" scrolling="no"
 			marginheight="0" marginwidth="0"></iframe>
 		</div>
 	</section>

@@ -9,7 +9,3 @@ if (cookies.get('fw-token')) cart.fetch();
 sapper.start({
 	target: document.getElementsByTagName('app')[0]
 });
-
-
-
-

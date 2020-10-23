@@ -8,4 +8,4 @@ yarn-error.log
 ./production.env
 ./development.env
 .env
-
+./static/logo.svg

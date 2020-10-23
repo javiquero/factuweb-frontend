@@ -103,9 +103,8 @@
 				<strong>Somos un equipo que quiere estar a tu lado</strong>
 			</h1>
 			<p class="text-center mb-30 text-equipo">
-				En factuWeb estamos trabajando duro para que tu puedas vender mas.
-				Nuestra misión es ayudarte y así tengas más tiempo para dedicarle a lo
-				que te apasiona.
+				En {$session.info.NOMEMP || siteName} estamos trabajando duro para que tu puedas vender más.
+				Nuestra misión es ayudarte y así tengas más tiempo para dedicarle a lo que te apasiona.
 			</p>
 			<div class="text-center mb-5">
 				<img src="/images/para-empresas.svg" alt="" />
@@ -137,7 +136,7 @@
 						<div class="title">Paso 3</div>
 						<div class="subtitle"style="font-weight: bold;">Accede a todos nuestros productos</div>
 						<p>
-							Visualiza nuestro catálogo con mas de 7000 productos.
+							Visualiza nuestro catálogo con más de 7000 productos.
 						</p>
 					</div>
 				</div>

@@ -128,7 +128,7 @@
 												<div>Size: <span class="bold">{fart.DIMART} </span></div>
 											{/if}
 											{#if fart.PESART != ""}
-												<div>Peso: <span class="bold">{fart.PESART}</span></div>
+												<div>Peso: <span class="bold">{fart.PESART}gr.</span></div>
 											{/if}
 										</div>
 

@@ -42,7 +42,7 @@
 	{#if $session.token}
 
 		<ul class="navbar-nav " style="flex-direction: unset;">
-			<li class="nav-item mr-3 dropdown  ">
+			<li class="nav-item mr-3 dropdown d-none d-sm-block">
 				<a class="nav-link dropdown-toggle fw-my-account-button" style="" href="null" id="navbarDropdown" role="button" data-toggle="dropdown"
 					aria-haspopup="true" aria-expanded="false">
 					Mi cuenta

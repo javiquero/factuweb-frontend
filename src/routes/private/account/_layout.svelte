@@ -35,7 +35,7 @@
 					</div>
 				</div>
 			</div>
-			<div class="col-lg-9 col-md-12 mt-5" style="max-width: 1300px;">
+			<div class="col-lg-9 col-md-12 mt-1" style="max-width: 1300px;">
 				<slot />
 			</div>
 		</div>

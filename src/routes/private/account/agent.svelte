@@ -44,7 +44,7 @@
 
 
 
-<div class="agent-section mt-3">
+<div class="agent-section mt-1">
 	<div class="row justify-content-md-center">
 		{#await getAgent()}
 			<div class="col-lg-9 col-xl-9 col-md-8 col-sm-12">
@@ -56,11 +56,11 @@
 					<div class="card-header">Agente asignado</div>
 					<div class="card-body">
 						<div class="row" style="font-size:27px">
-							<div class="col-3">
+							<div class="col-sm-3 text-center">
 								<img src="/logo.svg" width="90" height="90" class="d-inline-block align-top" alt="">
 							</div>
-							<div class="col-9" style="">
-								<span style="font-weight:bold;">{siteName}</span>
+							<div class="col-sm-9" style="">
+								<span style="font-weight:bold;">{$session.info.NOMEMP||siteName}</span>
 								<hr>
 								<div class=" text-responsive" >
 									<div>{info.agent.NOMAGE||''}</div>
@@ -84,7 +84,7 @@
 		{/await}
 	</div>
 		{#if info}
-			<div class="row mt-5">
+			<div class="row ">
 				<div class="col-12 col-md-6">
 					<div class="form-group">
 						<label for="exampleInputEmail1">Dirección de email de respuesta</label>

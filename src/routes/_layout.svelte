@@ -1,16 +1,12 @@
 <script context="module">
 	export async function preload(page, session) {
-		// if (localStorage.getItem('fw-token')) {console.log("logado");}else{console.log("nologado");}
+
 	}
 </script>
 
 <script>
 	import { stores	} from "@sapper/app";
-	const {
-		preloading,
-		page,
-		session
-	} = stores();
+	const { preloading, page, session } = stores();
 
 	import "./_app.scss";
 	import { siteName,showOrders,showInvoices } from "@/config";
@@ -19,6 +15,7 @@
 	import TopbarSearch from "@/components/topbarSearch.svelte";
 	import Footer from "@/components/footer.svelte";
 	import HbarSections from "@/components/hbarSections.svelte";
+
 	let searchText ="";
 	export let segment
 
@@ -28,13 +25,12 @@
 		auth.logout();
 	}
 
-
 </script>
 
 <nav class="navbar fixed-top topnavbar navbar-expand-md navbar-light bg-light">
 	<a class="navbar-brand" href="/">
 		<img src="/logo.svg" width="30" height="30" class="d-inline-block align-top" alt="">
-		<span class="logo">{siteName}</span>
+		<span class="logo">{$session.info.NOMEMP||siteName}</span>
 	</a>
 	{#if segment!="login"}
 		<ul style="display:inline-block" class="navbar-nav mr-auto w-100 text-center d-none d-md-block">
@@ -83,15 +79,15 @@
 </nav>
 
 <div class="pageContent">
-		{#if segment!="login"}
-			<div  class="secondarytopbar d-block d-md-none">
-				<div style="max-width:500px; width:100%;  display: inline-block;">
-					<TopbarSearch bind:value={searchText}></TopbarSearch>
-				</div>
+	{#if segment!="login"}
+		<div  class="secondarytopbar d-block d-md-none">
+			<div style="max-width:500px; width:100%;  display: inline-block;">
+				<TopbarSearch bind:value={searchText}></TopbarSearch>
 			</div>
-			<div class="d-block d-md-none" style="height:49px;"></div>
-			<HbarSections />
-		{/if}
+		</div>
+		<div class="d-block d-md-none" style="height:49px;"></div>
+		<HbarSections />
+	{/if}
   <slot />
 </div>
 
@@ -102,8 +98,6 @@
 	.topnavbar {
 		min-height:62px;
 		height:62px;
-		.fw-my-account-button{
-		}
 		.logo {
 			font-family: 'Paytone One';
 			font-weight: 400;

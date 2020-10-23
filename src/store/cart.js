@@ -51,14 +51,6 @@ function getCart() {
                 throw e
             }
 		},
-		// total: () => {
-		// 	let total = 0;
-		// 	let g = get();
-		// 	console.log(g);
-		// 	console.log(items);
-		// 	return total;
-
-		// }
     }
 }
 export const cart = getCart()

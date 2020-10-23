@@ -1,36 +1,58 @@
 <script>
-	import { stores	} from "@sapper/app";
 	import { showOrders,showInvoices } from "@/config";
+	import { stores	} from "@sapper/app";
 	const {session} = stores();
-
 </script>
 
 <div class="footer">
     <div class="container">
         <div class="row justify-content-end">
-
-
             <div class="col-xs-12 col-sm-6 col-md-4">
 				{#if $session.token}
-                <h3 >Mi cuenta</h3>
-                <ul >
-                    <li><a href="/private/account/address">Mis direcciones</a></li>
-                    <li><a href="/private/account/items">Artículos consumidos</a></li>
-					{#if showOrders==true}
-                    	<li><a href="/private/account/orders">Mis pedidos</a></li>
-					{/if}
-					{#if showInvoices==true}
-                    	<li><a href="/private/account/invoices">Mis facturas</a></li>
-					{/if}
-                    <li><a href="/private/account/agent">Contacto comercial</a></li>
-                </ul>
+					<h3 >Mi cuenta</h3>
+					<ul >
+						<li><a href="/private/account/address">Mis direcciones</a></li>
+						<li><a href="/private/account/items">Artículos consumidos</a></li>
+						{#if showOrders==true}
+							<li><a href="/private/account/orders">Mis pedidos</a></li>
+						{/if}
+						{#if showInvoices==true}
+							<li><a href="/private/account/invoices">Mis facturas</a></li>
+						{/if}
+						<li><a href="/private/account/agent">Contacto comercial</a></li>
+					</ul>
 				{/if}
             </div>
 
-			<div class="col-xs-12 col-sm-6 col-md-5 col-xl-4">
-					<h3>Dónde estamos</h3>
-					<p>Geolit, Parque Científico y Tecnológico<br>Edificio Software DELSOL · 23620<br>Mengíbar · Jaén</p>
-					<p>Centralita: <a href="tel:953227933">953 22 79 33</a><br>Comercial: <a href="tel:953214100">953 21 41 00</a></p>
+			<div class="col-xs-12 col-sm-6 col-md-5 col-xl-4 address">
+						<h3>Dónde estamos</h3>
+						<div>
+							<i class="fal fa-building" style="float:left"></i>
+							<div style="display: inline-block">
+								<span style="text-decoration: underline">{$session.info.NOMEMP||""}</span><br>
+								{$session.info.DOMEMP||""}
+								{$session.info.NUMEMP ? ", " + $session.info.NUMEMP: "" }
+								{#if $session.info.PISEMP || $session.info.PRTEMP}
+									{ $session.info.PISEMP} {$session.info.PRTEMP ? "- " + $session.info.PRTEMP: "" }
+								{/if}
+								{$session.info.ESCEMP || ""}
+								<br>{$session.info.POBEMP||""}{$session.info.POBEMP && $session.info.CPOEMP?" · ":""}{$session.info.CPOEMP||""}
+								<br>{$session.info.MUNEMP||""}{$session.info.MUNEMP && $session.info.PROEMP?" · ":""}{$session.info.PROEMP||""}
+							</div>
+						</div>
+						<!-- </p> -->
+						<p>
+							{#if $session.info.TELEMP}
+								 <a href="tel:{$session.info.TELEMP}"><i class="fal fa-phone"></i> Teléfono:{$session.info.TELEMP}</a><br>
+							{/if}
+
+							{#if $session.info.FAXEMP}
+								<i class="fal fa-fax"></i> Fax: {$session.info.FAXEMP}<br>
+							{/if}
+							{#if $session.info.EMAEMP}
+								<a href="mailto:{$session.info.EMAEMP}"><i class="fal fa-envelope"></i> Email: {$session.info.EMAEMP}</a>
+							{/if}
+						</p>
 				</div>
 			</div>
     </div>
@@ -45,6 +67,11 @@
         min-height: 200px;
         padding: 20px;
 		font-size: 15px;
+		.address{
+			i{
+				margin-right:20px;
+			}
+		}
 		a{
 			color:white;
 			text-decoration: none;

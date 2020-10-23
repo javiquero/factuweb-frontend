@@ -9,6 +9,8 @@
 </script>
 <script>
 	import { siteName } from "@/config.js";
+	import { stores	} from "@sapper/app";
+	const {session} = stores();
 </script>
 
 <style lang="scss">
@@ -63,15 +65,15 @@
 </style>
 
 <svelte:head>
-  <title>{siteName}</title>
-  <meta data-hid="description" name="description" content="Site {siteName}" />
-  <meta data-hid="og:title" name="og_title" content="Site {siteName}" />
+  <title>{$session.info.NOMEMP || siteName}</title>
+  <meta data-hid="description" name="description" content="Site {$session.info.NOMEMP || siteName}" />
+  <meta data-hid="og:title" name="og_title" content="Site {$session.info.NOMEMP || siteName}" />
 </svelte:head>
 
 <div>
 	<div class="head">
 		<div class="main-logo" ></div>
-		<span>Bienvenido a {siteName}!</span>
+		<span>Bienvenido a {$session.info.NOMEMP || siteName}!</span>
 		<p>No lo pienses más y entra a ver nuestro catálogo</p>
 		<a href="/section/0" class="btn btn-primary">Ver catálogo</a>
 	</div>

@@ -82,7 +82,7 @@
 </script>
 
 <svelte:head>
-  <title>{siteName} </title>
+  <title>{$session.info.NOMEMP || siteName} </title>
 </svelte:head>
 <main>
 	<section class="items-section">

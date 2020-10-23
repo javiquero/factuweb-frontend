@@ -13,7 +13,8 @@ function logger(req, res, next) {
 	next();
 }
 
-import { post } from "./lib/api";
+import { get, post } from "./lib/api";
+
 async function authenticationMiddleware(req, res, next) {
     const isFile = req.path.includes('.');
     if (isFile || req.path.substr(0, 4) == "/api") return next();
@@ -51,14 +52,14 @@ async function authenticationMiddleware(req, res, next) {
         } else {
             req.user = cookies.get('fw-data')
             req.token = cookies.get('fw-token')
-            // console.log("all ok");
         }
-    }
+	}
+
+	req.info = await get('info', null);
     next();
 }
 
 polka()
-
     .use(
         compression({
             threshold: 0
@@ -69,8 +70,9 @@ polka()
 		authenticationMiddleware,
 		logger,
         apiProxy,
-        sapper.middleware({
-            session: (req, res) => ({
+		sapper.middleware({
+			session: (req, res) => ({
+				info: req.info,
                 user: req.user || {},
                 token: req.token
             })

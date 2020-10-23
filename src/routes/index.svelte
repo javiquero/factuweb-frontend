@@ -103,7 +103,7 @@
 				<strong>Somos un equipo que quiere estar a tu lado</strong>
 			</h1>
 			<p class="text-center mb-30 text-equipo">
-				En {$session.info.NOMEMP || siteName} estamos trabajando duro para que tu puedas vender más.
+				En {$session.info.NOMEMP || siteName} estamos trabajando duro para que tú puedas vender más.
 				Nuestra misión es ayudarte y así tengas más tiempo para dedicarle a lo que te apasiona.
 			</p>
 			<div class="text-center mb-5">

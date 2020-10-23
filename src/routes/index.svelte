@@ -38,6 +38,12 @@
 	}
 
 
+
+.container p.text-equipo{
+			margin-left: 25%;
+			margin-right:25%;
+		}
+
 	section {
 		margin-top: 40px;
 		img {
@@ -50,6 +56,8 @@
 			background-position: top center;
 			background-repeat: no-repeat;
 		}
+
+
 		.gmap_canvas {overflow:hidden;background:none!important;height:500px;width:100%;}
 	}
 
@@ -60,6 +68,17 @@
 		padding: 40px;
 		.subtitle, .title{
 			margin-bottom:15px;
+		}
+	}
+	@media (max-width: 540px) {
+		.head{
+			span{
+				font-size: 20px;
+			}
+		}
+		.container p.text-equipo{
+			margin-left: 20px;
+			margin-right:20px;
 		}
 	}
 </style>
@@ -83,7 +102,7 @@
 			<h1 class="text-center">
 				<strong>Somos un equipo que quiere estar a tu lado</strong>
 			</h1>
-			<p class="text-center mb-30 " style="margin-right:25%; margin-left:25%">
+			<p class="text-center mb-30 text-equipo">
 				En factuWeb estamos trabajando duro para que tu puedas vender mas.
 				Nuestra misión es ayudarte y así tengas más tiempo para dedicarle a lo
 				que te apasiona.

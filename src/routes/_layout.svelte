@@ -95,6 +95,12 @@
 <Footer></Footer>
 
 <style lang="scss">
+	@media (max-width: 540px) {
+		.logo{
+				font-size: 20px !important;
+		}
+	}
+
 	.topnavbar {
 		min-height:62px;
 		height:62px;

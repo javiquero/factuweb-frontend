@@ -16,7 +16,7 @@
  	let qty = 0
 	let inCart = false;
 
-  	$:product = getProduct()
+  	$:product = getProduct(fart)
 	$:inCart = isInCart($cart, fart)
 
 	function isInCart(x, i){
@@ -45,7 +45,22 @@
 	<div class="card">
 		<div class="card-body fw-card-body" class:incart="{inCart === true}">
 			{#await product}
-				<h3>Cargando... espera</h3>
+				<div class="placeholder-text"></div>
+				<div class="row">
+					<div class="col">
+						<div class="placeholder-text" style="height:180px;"></div>
+					</div>
+					<div class="col">
+						<div class="placeholder-text"></div>
+						<div class="placeholder-text mb-5"></div>
+						<div class="placeholder-text" style="height:50px;"></div>
+					</div>
+				</div>
+				<div class="row mt-2">
+					<div class="col offset-9">
+						<div class="placeholder-text "></div>
+					</div>
+				</div>
 			{:then product}
 				{#if !product || product == {}}
 					<h3>
@@ -154,6 +169,19 @@
 
 
 <style lang="scss">
+.placeholder-text {
+    display: inline-block;
+	height: 30px;
+	margin-bottom:7px;
+    width: 100%;
+    border-radius: 3px;
+    background-color: #eee;
+    background-image: url(/img/phloader.gif);
+    background-attachment: fixed;
+    background-repeat: repeat-y;
+    background-size: 100% 1px;
+  }
+
 	.incart{
 		background-color: aliceblue; //linen
 	}

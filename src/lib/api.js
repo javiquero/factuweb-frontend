@@ -29,7 +29,7 @@ async function send({ method, path, data, token, cookie }) {
 		try {
 			let Url = "";
 			if (typeof window === "undefined") {
-				Url = "http://localhost:" + PORT;;
+				Url = "http://localhost:" + PORT;
 			} else {
 				Url = window.location.origin;
 			}

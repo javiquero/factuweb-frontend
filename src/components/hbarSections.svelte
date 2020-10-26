@@ -1,11 +1,14 @@
 
 <script>
+
+	import {get} from "@/lib/api";
 	import { stores } from "@sapper/app";
 	const { session} = stores();
-	import {get} from "@/lib/api";
 	import { onMount } from 'svelte';
 
+	// let promisegetSections = getSections()
 	let sections = [];
+
 	function getSections() {
 		return new Promise(async (resolve, reject) =>{
 			try {
@@ -65,16 +68,16 @@
 						<div class="dropdown-menu" aria-labelledby="navbarDropdown" style="position:absolute;">
 							{#each s.fam as f}
 								{#if $session.token}
-									<a class="dropdown-item" href="/private/catalog/section/{f.CODFAM}"> {f.DESFAM}</a>
-								{:else}
-									<a class="dropdown-item" href="/section/{f.CODFAM}"> {f.DESFAM}</a>
-								{/if}
+                                    <a class="dropdown-item" href="/private/catalog/section/{f.CODFAM}"> {f.DESFAM}</a>
+                                {:else}
+                                    <a class="dropdown-item" href="/section/{f.CODFAM}"> {f.DESFAM}</a>
+                                {/if}
 							{/each}
 						</div>
 					</li>
 				{:else}
 					<li class="nav-item dropdown" >
-						<span class="navbar-text">Error! ha sido imposible recuperar las secciones del servidor, haga click<a href="/private">aquí</a></span>
+						<span class="navbar-text">Error! ha sido imposible recuperar las secciones del servidor, haga click<a href="/">aquí</a></span>
 					</li>
 				{/if}
 			{/each}

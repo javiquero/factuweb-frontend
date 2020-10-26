@@ -56,6 +56,50 @@
 			</div>
 		</div>
 	</div>
+
+
+	<div class="modal fade" id="ModalRemoveFromCart" tabindex="-1" role="dialog" aria-labelledby="ModalRemoveFromCartTitle" aria-hidden="true">
+		<div class="modal-dialog modal-dialog-scrollable modal-lg modal-dialog-centered" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="ModalRemoveFromCartTitle">
+						<svg style="width:30px; height:30px;" aria-hidden="true" focusable="false" data-prefix="fad" data-icon="exclamation-triangle" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512" class="svg-inline--fa fa-exclamation-triangle fa-w-18 fa-3x"><g class="fa-group"><path fill="#ccc" d="M569.52 440L329.58 24c-18.44-32-64.69-32-83.16 0L6.48 440c-18.42 31.94 4.64 72 41.57 72h479.89c36.87 0 60.06-40 41.58-72zM288 448a32 32 0 1 1 32-32 32 32 0 0 1-32 32zm38.24-238.41l-12.8 128A16 16 0 0 1 297.52 352h-19a16 16 0 0 1-15.92-14.41l-12.8-128A16 16 0 0 1 265.68 192h44.64a16 16 0 0 1 15.92 17.59z" class="fa-secondary"></path><path fill="white" d="M310.32 192h-44.64a16 16 0 0 0-15.92 17.59l12.8 128A16 16 0 0 0 278.48 352h19a16 16 0 0 0 15.92-14.41l12.8-128A16 16 0 0 0 310.32 192zM288 384a32 32 0 1 0 32 32 32 32 0 0 0-32-32z" class="fa-primary"></path></g></svg>
+						<span style="margin-left: 10px;margin-top: 5px; position: absolute;">Atención</span>
+					</h5>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body">
+				<div class="text-center"><strong>
+				Los siguientes artículos se han eliminado de tu carro porque en estos momentos no se encuentran disponibles.
+				</strong>
+				</div>
+					<br/><br/>
+					<table>
+						{#each $cart.items as item}
+							<tr>
+								<td style="min-width:100px; width:100px;padding:5px;">
+									<div class="thumb-image media text-center">
+									<img src="/api/image/150/{item.IMGART}"
+										alt="Imagen de la referéncia {item.CODART}"
+										style="width:90%;"
+										class="align-self-center mr-0" />
+									</div>
+								</td>
+								<td>{item.qty}</td>
+								<td>{item.CODART}</td>
+								<td>{item.DESART}</td>
+							</tr>
+						{/each}
+					</table>
+				</div>
+				<div class="modal-footer" style="border-top:none;">
+					<button type="button" class="btn btn-primary" data-dismiss="modal">Cerrar</button>
+				</div>
+			</div>
+		</div>
+	</div>
 <!-- </main> -->
 <script>
 import { cart } from "./../store/cart.js";
@@ -65,6 +109,7 @@ import { onMount } from 'svelte';
 
 onMount(async () => {
 	window.$("#ModalRemoveCart").appendTo("body");
+		window.$("#ModalRemoveFromCart").appendTo("body");
 	window.$('.topbarcart').on('show.bs.dropdown', function (e) {
 		if ($cart.items.length>0){
 			visible=true;
@@ -75,6 +120,10 @@ onMount(async () => {
 	window.$('.topbarcart').on('hide.bs.dropdown', function () {
 		visible=false;
 	});
+
+	if ($cart.outOfCart.length>0){
+		window.$("#ModalRemoveFromCart").modal();
+	}
 });
 
 let visible = false;

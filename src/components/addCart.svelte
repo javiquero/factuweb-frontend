@@ -16,14 +16,13 @@
 		}else{
 			this.value = 0;
 		}
-	};
+	}
 	function getInCart(x){
 		let found = x.items.find(element => element.CODART == fart.CODART && element.CE1ART == fart.CE1ART);
 		if (!found ) return 0;
 		showCant=true;
 		return found.qty;
 	}
-
 	function toggleQty() {
 		showCant = !showCant;
 		window.$('[data-toggle="tooltip"]').tooltip('hide')

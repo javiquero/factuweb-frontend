@@ -1,7 +1,14 @@
 <script>
 	import { showOrders,showInvoices } from "@/config";
+	import { auth } from "@/store/auth.js";
 	import { stores	} from "@sapper/app";
 	const {session} = stores();
+
+	function logout() {
+		$session.user = {};
+		$session.token = undefined;
+		auth.logout();
+	}
 </script>
 
 <div class="footer">
@@ -20,6 +27,7 @@
 							<li><a href="/private/account/invoices">Mis facturas</a></li>
 						{/if}
 						<li><a href="/private/account/agent">Contacto comercial</a></li>
+						<li><a on:click={logout} href="{null}">Desconectar</a></li>
 					</ul>
 				{/if}
             </div>

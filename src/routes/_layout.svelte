@@ -9,8 +9,9 @@
 	const { preloading, page, session } = stores();
 
 	import "./_app.scss";
-	import { siteName,showOrders,showInvoices } from "@/config";
+	import { siteName, showOrders, showInvoices, IDAnalytics, siteDescription } from "@/config";
 	import { auth } from "@/store/auth.js";
+	import { onMount } from 'svelte';
 	import TopbarCart from "@/components/topbarCart.svelte";
 	import TopbarSearch from "@/components/topbarSearch.svelte";
 	import Footer from "@/components/footer.svelte";
@@ -25,7 +26,25 @@
 		auth.logout();
 	}
 
+	onMount(async () => {
+		 window.dataLayer = window.dataLayer || [];
+		function gtag(){dataLayer.push(arguments);}
+		gtag('js', new Date());
+
+		gtag('config', {IDAnalytics});
+	});
 </script>
+
+<svelte:head>
+	<title>{$session.info.NOMEMP || siteName}</title>
+  	<meta data-hid="og:description" name="og:description" content="{siteDescription}" />
+   	<meta data-hid="description" name="description" content="{siteDescription}" />
+   	<meta data-hid="og:title" name="og:title" content="{$session.info.NOMEMP || siteName}" />
+	<meta data-hid="title" name="title" content="{$session.info.NOMEMP || siteName}" />
+	<meta data-hid="og:image" name="og:image" content="{$page.protocol}//{$page.host}/logo.svg" />
+
+	<script async src="https://www.googletagmanager.com/gtag/js?id={IDAnalytics}"></script>
+</svelte:head>
 
 <nav class="navbar fixed-top topnavbar navbar-expand-md navbar-light bg-light">
 	<a class="navbar-brand" href="/">
@@ -40,7 +59,6 @@
 		</ul>
 	{/if}
 	{#if $session.token}
-
 		<ul class="navbar-nav " style="flex-direction: unset;">
 			<li class="nav-item mr-3 dropdown d-none d-sm-block">
 				<a class="nav-link dropdown-toggle fw-my-account-button" style="" href="null" id="navbarDropdown" role="button" data-toggle="dropdown"

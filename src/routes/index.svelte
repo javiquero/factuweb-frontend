@@ -1,4 +1,3 @@
-
 <script context="module">
 	export async function preload(page, session, query) {
 		const { section } = page.params;
@@ -8,7 +7,7 @@
 	}
 </script>
 <script>
-	import { siteName } from "@/config.js";
+	import { siteName, siteDescription } from "@/config.js";
 	import { stores	} from "@sapper/app";
 	const {session} = stores();
 </script>
@@ -39,7 +38,7 @@
 
 
 
-.container p.text-equipo{
+	.container p.text-equipo{
 			margin-left: 25%;
 			margin-right:25%;
 		}
@@ -85,8 +84,7 @@
 
 <svelte:head>
   <title>{$session.info.NOMEMP || siteName}</title>
-  <meta data-hid="description" name="description" content="Site {$session.info.NOMEMP || siteName}" />
-  <meta data-hid="og:title" name="og_title" content="Site {$session.info.NOMEMP || siteName}" />
+  <meta data-hid="description" name="description" content="{siteDescription}" />
 </svelte:head>
 
 <div>

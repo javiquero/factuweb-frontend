@@ -28,11 +28,12 @@
 	}
 
 	onMount(async () => {
-		 window.dataLayer = window.dataLayer || [];
+		window.dataLayer = window.dataLayer || [];
 		function gtag(){dataLayer.push(arguments);}
 		gtag('js', new Date());
-
-		gtag('config', {IDAnalytics});
+		gtag('config', IDAnalytics,  {
+				page_path: $page.path
+			});
 	});
 </script>
 

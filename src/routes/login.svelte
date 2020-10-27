@@ -37,8 +37,12 @@
 
 <svelte:head>
 	<title>{$session.info.NOMEMP || siteName} | Login</title>
-	<meta data-hid="description" name="description" content="Login to {$session.info.NOMEMP || siteName}" />
-	<meta data-hid="og:title" name="og_title" content="Login to {$session.info.NOMEMP || siteName}" />
+
+	<meta data-hid="description" name="description" content="Página de acceso login al catálogo de productos · {$session.info.NOMEMP || siteName}" />
+	<meta data-hid="title" name="title" content="Login to {$session.info.NOMEMP || siteName}" />
+
+	<meta data-hid="og:description" name="og:description" content="Página de acceso login al catálogo de productos · {$session.info.NOMEMP || siteName}" />
+	<meta data-hid="og:title" name="og:title" content="Login to {$session.info.NOMEMP || siteName}" />
 </svelte:head>
 
 <section style="margin-top: 30px;">

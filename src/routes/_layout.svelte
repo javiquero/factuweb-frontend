@@ -9,7 +9,7 @@
 	const { preloading, page, session } = stores();
 
 	import "./_app.scss";
-	import { siteName, showOrders, showInvoices, IDAnalytics, siteDescription } from "@/config";
+	import { siteName, showOrders, showInvoices, IDAnalytics, SEO } from "@/config";
 	import { auth } from "@/store/auth.js";
 	import { onMount } from 'svelte';
 	import TopbarCart from "@/components/topbarCart.svelte";
@@ -36,12 +36,15 @@
 </script>
 
 <svelte:head>
-	<title>{$session.info.NOMEMP || siteName}</title>
-  	<meta data-hid="og:description" name="og:description" content="{siteDescription}" />
-   	<meta data-hid="description" name="description" content="{siteDescription}" />
-   	<meta data-hid="og:title" name="og:title" content="{$session.info.NOMEMP || siteName}" />
-	<meta data-hid="title" name="title" content="{$session.info.NOMEMP || siteName}" />
-	<meta data-hid="og:image" name="og:image" content="{$page.protocol}//{$page.host}/logo.svg" />
+	<title>{$session.info ? $session.info.NOMEMP: siteName || siteName}</title>
+  	<meta data-hid="description" name="description" content="{SEO.description}" />
+   	<meta data-hid="title" name="title" content="{SEO.title}" />
+
+	<meta data-hid="og:description" name="og:description" content="{SEO.description}" />
+   	<meta data-hid="og:title" name="og:title" content="{SEO.title}" />
+	<meta data-hid="og:image" name="og:image" content="{$page.protocol}//{$page.host}/{SEO.image}" />
+	<meta data-hid="og:url" name="og:url" content="{$page.protocol}//{$page.host}" />
+	<meta data-hid="og:locale" name="og:locale" content="{SEO.locale}" />
 
 	<script async src="https://www.googletagmanager.com/gtag/js?id={IDAnalytics}"></script>
 </svelte:head>
@@ -49,7 +52,7 @@
 <nav class="navbar fixed-top topnavbar navbar-expand-md navbar-light bg-light">
 	<a class="navbar-brand" href="/">
 		<img src="/logo.svg" width="30" height="30" class="d-inline-block align-top" alt="">
-		<span class="logo">{$session.info.NOMEMP||siteName}</span>
+		<span class="logo">{$session.info ? $session.info.NOMEMP: siteName||siteName}</span>
 	</a>
 	{#if segment!="login"}
 		<ul style="display:inline-block" class="navbar-nav mr-auto w-100 text-center d-none d-md-block">

@@ -33,10 +33,12 @@
             </div>
 
 			<div class="col-xs-12 col-sm-6 col-md-5 col-xl-4 address">
+				{#if $session.info}
 						<h3>Dónde estamos</h3>
 						<div>
 							<i class="fal fa-building" style="float:left"></i>
 							<div style="display: inline-block">
+
 								<span style="text-decoration: underline">{$session.info.NOMEMP||""}</span><br>
 								{$session.info.DOMEMP||""}
 								{$session.info.NUMEMP ? ", " + $session.info.NUMEMP: "" }
@@ -46,6 +48,7 @@
 								{$session.info.ESCEMP || ""}
 								<br>{$session.info.POBEMP||""}{$session.info.POBEMP && $session.info.CPOEMP?" · ":""}{$session.info.CPOEMP||""}
 								<br>{$session.info.MUNEMP||""}{$session.info.MUNEMP && $session.info.PROEMP?" · ":""}{$session.info.PROEMP||""}
+
 							</div>
 						</div>
 						<!-- </p> -->
@@ -61,6 +64,7 @@
 								<a href="mailto:{$session.info.EMAEMP}"><i class="fal fa-envelope"></i> Email: {$session.info.EMAEMP}</a>
 							{/if}
 						</p>
+						{/if}
 				</div>
 			</div>
     </div>

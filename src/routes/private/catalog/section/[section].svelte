@@ -1,8 +1,11 @@
 <!-- // SAPPER preLoad Section -->
 	<script context="module">
+		import { get } from "@/lib/api";
 		export async function preload(page, session, query) {
 			const { section } = page.params;
-			return {idSection: section}
+
+			let items = await get(`catalog/${section}`);
+			return {idSection: section, sections: items}
 		}
 	</script>
 
@@ -13,29 +16,16 @@
 	import ModalDetails from "@/components/modalDetails.svelte";
 	import { siteName, contactEmail } from "@/config";
 	import { stores } from "@sapper/app"
-	import { get } from "@/lib/api";
+
 	import { onMount } from 'svelte';
 
-	const { session } = stores()
+	const { preloading, page, session } = stores();
 
-	export let idSection = 0;
-	let remoteData= undefined;
-	$:remoteData = getRemoteData(idSection)
-	let inf=undefined;
 
-	function getRemoteData(id){
-		if (id == undefined ) id = idSection;
-		return new Promise(async (resolve, reject) =>{
-			try {
-				let items = await get(`catalog/${id}`,"",$session.token);
-				inf = items;
-				return resolve(items);
-			} catch (error) {
-				console.error(error);
-				return reject(error);
-			}
-		});
-	}
+	export let sections;
+	$: sectionData = sections;
+	$: ogImage = _ogImage(sections);
+
 	let selectedProduct = undefined;
 	function onSelectThumb(event){
 		selectedProduct= event.detail;
@@ -48,18 +38,27 @@
 			if (head == null) return;
 				if(top > 61){
 				head.classList.add("arrowsfixed");
-				// head.style.position = "fixed";
-				// head.style.width="100%";
-				// head.style.top="62px";
-				// head.style['z-index']=1;
 			} else {
 				head.classList.remove("arrowsfixed");
-			// if(head.getAttribute("style"))
-				// head.removeAttribute("style")
 		  }
 		};
 	});
 
+	function _ogImage(sectionData){
+		if (sectionData){
+			if (sectionData.IMAFAM && sectionData.IMAFAM!=""){
+				return $page.protocol + "//" + $page.host + "/api/image/150/" + sectionData.IMAFAM;
+			}else{
+				if (sectionData.items && sectionData.items.length>0){
+					return $page.protocol + "//" + $page.host + "/api/image/150/" + sectionData.items[0].IMGART;
+				}else{
+					return undefined;
+				}
+			}
+		}else{
+			return undefined;
+		}
+	}
 </script>
 
 
@@ -77,15 +76,26 @@
 </style>
 
 
-
 <svelte:head>
-  <title>{siteName} - {inf?inf.DESFAM:''}</title>
+  	<title>{$session.info.NOMEMP || siteName} - {sectionData?sectionData.DESFAM:''}</title>
+
+	<meta data-hid="description" name="description" content="Sección {sectionData?sectionData.DESFAM:''} del catálogo de {$session.info.NOMEMP || siteName}" />
+	<meta data-hid="title" name="title" content="{sectionData?sectionData.DESFAM:''} · {$session.info.NOMEMP || siteName}" />
+
+	<meta data-hid="og:description" name="og:description" content="Sección {sectionData?sectionData.DESFAM:''} del catálogo de {$session.info.NOMEMP || siteName}" />
+	<meta data-hid="og:title" name="og:title" content="{sectionData?sectionData.DESFAM:''} · {$session.info.NOMEMP || siteName}" />
+	{#if ogImage!=undefined}
+	<meta data-hid="og:image" name="og:image" content="{ogImage}" />
+	{/if}
+
 </svelte:head>
+
+
 <main>
 	<section class="items-section">
 	<!-- <div class="container-fluid"> -->
 		<div class="container-xl">
-			{#await remoteData}
+			{#if $preloading}
 				<div class="row">
 						<div class="col mb-3">
 							<PreText></PreText>
@@ -100,16 +110,8 @@
 						<div class="col-xs-12 col-sm-6 col-lg-4 col-xl-4"><PreThumbItem /></div>
 					{/each}
 				</div>
-			{:then sectionData}
-					<!-- <div class="row w-100 d-none d-xl-flex" style="position:fixed; left:10px; z-index: 1">
-						<div class="col-6">
-							<a class="btn btn-light" href="/private/catalog/section/{sectionData.inf.previous}" role="button"><i class="fas fa-chevron-left"></i></a>
-						</div>
-						<div class="col-6 text-right">
-							<a class="btn btn-light" href="/private/catalog/section/{sectionData.inf.next}" role="button"><i class="fas fa-chevron-right"></i></a>
-						</div>
-					</div>
-					<div id="sectionarrows" class="row d-flex d-xl-none justify-content-between mb-4" > -->
+		{/if}
+		{#if sectionData.items}
 					<div id="sectionarrows" class="row justify-content-between mb-4" >
 						<div class="col-3">
 							<a class="btn btn-light btn-block" href="/private/catalog/section/{sectionData.inf.previous}" role="button"><i class="fas fa-chevron-left"></i></a>
@@ -149,18 +151,15 @@
 					</div>
 					<ModalDetails items="{sectionData.items}" selected="{selectedProduct}"></ModalDetails>
 				{/if}
-
-
-			{:catch error}
+			{/if}
+			<!-- {:catch error}
 				<div class="alert alert-danger" role="alert">
 						<h4 class="alert-heading">Error al recibir información!</h4>
 					{error.message}
 					<hr>
 					<p class="mb-0">Recargue la página y si el problema persiste contacte con {contactEmail}.</p>
 				</div>
-			{/await}
-
-
+			{/await} -->
 		</div>
 	</section>
 </main>

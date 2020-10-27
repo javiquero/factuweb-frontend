@@ -7,8 +7,23 @@
 </script>
 
 <script>
-	// import HbarSections from "@/components/hbarSections.svelte";
+	import { stores, goto } from '@sapper/app'
+	import { siteName } from '@/config'
+
+	const { session, page } = stores();
 </script>
+
+
+<svelte:head>
+	<title>{$session.info.NOMEMP || siteName} | Zona privada</title>
+
+	<meta data-hid="description" name="description" content="Area privada accesible únicamente por clientes · {$session.info.NOMEMP || siteName}" />
+	<meta data-hid="title" name="title" content="Zona privada · {$session.info.NOMEMP || siteName}" />
+
+	<meta data-hid="og:description" name="og:description" content="Area privada accesible únicamente por clientes · {$session.info.NOMEMP || siteName}" />
+	<meta data-hid="og:title" name="og_title" content="Zona privada · {$session.info.NOMEMP || siteName}" />
+</svelte:head>
+
 
 <style>
 	.pageContent {

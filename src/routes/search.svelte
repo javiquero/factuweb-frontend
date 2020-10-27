@@ -81,8 +81,16 @@
 	}
 </script>
 
+
+
 <svelte:head>
-  <title>{$session.info.NOMEMP || siteName} </title>
+	<title>{$session.info.NOMEMP || siteName} | Resultados de la búsqueda</title>
+
+	<meta data-hid="description" name="description" content="Página de resultados de la búsqueda de productos · {$session.info.NOMEMP || siteName}" />
+	<meta data-hid="title" name="title" content="Resultados de busqueda · {$session.info.NOMEMP || siteName}" />
+
+	<meta data-hid="og:description" name="og:description" content="Página de resultados de la búsqueda de productos · {$session.info.NOMEMP || siteName}" />
+	<meta data-hid="og:title" name="og:title" content="Resultados de busqueda · {$session.info.NOMEMP || siteName}" />
 </svelte:head>
 <main>
 	<section class="items-section">

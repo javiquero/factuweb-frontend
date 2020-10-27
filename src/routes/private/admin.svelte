@@ -13,8 +13,6 @@
 
 <svelte:head>
   	<title>{siteName} | Area privada | Admin</title>
-  	<meta data-hid="description" name="description" content="Area privada de {siteName}" />
-	<meta data-hid="og:title" name="og_title" content="Area privada de {siteName}" />
 </svelte:head>
 
 <div class="container" style="margin-top: 50px;">

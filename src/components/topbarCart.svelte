@@ -77,7 +77,7 @@
 				</div>
 					<br/><br/>
 					<table>
-						{#each $cart.items as item}
+						{#each $cart.outOfCart as item}
 							<tr>
 								<td style="min-width:100px; width:100px;padding:5px;">
 									<div class="thumb-image media text-center">

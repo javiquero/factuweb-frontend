@@ -7,7 +7,7 @@
 	}
 </script>
 <script>
-	import { siteName, siteDescription } from "@/config.js";
+	import { siteName } from "@/config.js";
 	import { stores	} from "@sapper/app";
 	const {session} = stores();
 </script>
@@ -84,7 +84,6 @@
 
 <svelte:head>
   <title>{$session.info.NOMEMP || siteName}</title>
-  <meta data-hid="description" name="description" content="{siteDescription}" />
 </svelte:head>
 
 <div>

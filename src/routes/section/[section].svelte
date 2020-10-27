@@ -3,6 +3,7 @@
 	import { get } from "@/lib/api";
 	export async function preload(page, session, query) {
 		const { section } = page.params;
+		console.log(page.params)
 		if (session.token != undefined && session.token != null ) {
 			return this.redirect(302, "/private/catalog/section/"+section);
 		}else{
@@ -16,7 +17,7 @@
 <script>
 
 	import { stores	} from "@sapper/app";
-	const { preloading, session } = stores();
+	const { preloading, page, session } = stores();
 
 	import ThumbItem from "@/components/thumbItem.svelte";
 	import PreThumbItem from "@/components/preThumbItem.svelte";
@@ -29,10 +30,26 @@
 
 	export let sections;
 	$: sectionData = sections;
+	$: ogImage = _ogImage(sections);
 
 	let selectedProduct = undefined;
 	function onSelectThumb(event){
 		selectedProduct= event.detail;
+	}
+	function _ogImage(sectionData){
+		if (sectionData){
+			if (sectionData.IMAFAM && sectionData.IMAFAM!=""){
+				return $page.protocol + "//" + $page.host + "/api/image/150/" + sectionData.IMAFAM;
+			}else{
+				if (sectionData.items && sectionData.items.length>0){
+					return $page.protocol + "//" + $page.host + "/api/image/150/" + sectionData.items[0].IMGART;
+				}else{
+					return undefined;
+				}
+			}
+		}else{
+			return undefined;
+		}
 	}
 
 	onMount(async () => {
@@ -61,11 +78,18 @@
 </style>
 <svelte:head>
   	<title>{$session.info.NOMEMP || siteName} - {sectionData?sectionData.DESFAM:''}</title>
-	<meta data-hid="og:description" name="og:description" content="{$session.info.NOMEMP || siteName} - Sección del catálogo  {sectionData?sectionData.DESFAM:''}" />
-   	<meta data-hid="description" name="description" content="{$session.info.NOMEMP || siteName} - Sección del catálogo  {sectionData?sectionData.DESFAM:''}" />
-   	<meta data-hid="og:title" name="og:title" content="{$session.info.NOMEMP || siteName}" />
-	<meta data-hid="title" name="title" content="{$session.info.NOMEMP || siteName}" />
+
+	<meta data-hid="description" name="description" content="Sección {sectionData?sectionData.DESFAM:''} del catálogo de {$session.info.NOMEMP || siteName}" />
+	<meta data-hid="title" name="title" content="{sectionData?sectionData.DESFAM:''} · {$session.info.NOMEMP || siteName}" />
+
+	<meta data-hid="og:description" name="og:description" content="Sección {sectionData?sectionData.DESFAM:''} del catálogo de {$session.info.NOMEMP || siteName}" />
+	<meta data-hid="og:title" name="og:title" content="{sectionData?sectionData.DESFAM:''} · {$session.info.NOMEMP || siteName}" />
+	{#if ogImage!=undefined}
+	<meta data-hid="og:image" name="og:image" content="{ogImage}" />
+	{/if}
+
 </svelte:head>
+
 <main>
 	<section class="items-section">
 		<div class="container-xl">

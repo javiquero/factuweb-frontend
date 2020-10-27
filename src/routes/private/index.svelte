@@ -17,12 +17,6 @@
 	}
 </style>
 
-<svelte:head>
-  	<title>{$session.info.NOMEMP || siteName} | Area privada</title>
-  	<meta data-hid="description" name="description" content="Area privada de {$session.info.NOMEMP || siteName}" />
-	<meta data-hid="og:title" name="og_title" content="Area privada de {$session.info.NOMEMP || siteName}" />
-</svelte:head>
-
 <div class="container" style="margin-top: 50px;">
   <div class="row">
     <div class="col text-center">

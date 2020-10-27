@@ -19,8 +19,10 @@
 
 	let searchText ="";
 	export let segment
+	let gtag;
 
-	$: {
+	$:refreshAnalytics($page);
+	function refreshAnalytics(val) {
 		if (typeof gtag !== "undefined"){
 			gtag("config", IDAnalytics, {
 				page_path: $page.path
@@ -36,7 +38,7 @@
 
 	onMount(async () => {
 		window.dataLayer = window.dataLayer || [];
-		function gtag(){dataLayer.push(arguments);}
+		gtag = function (){dataLayer.push(arguments);}
 		gtag('js', new Date());
 		gtag('config', IDAnalytics, { page_path: $page.path });
 	});

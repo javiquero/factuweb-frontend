@@ -3,7 +3,6 @@
 	import { get } from "@/lib/api";
 	export async function preload(page, session, query) {
 		const { section } = page.params;
-		console.log(page.params)
 		if (session.token != undefined && session.token != null ) {
 			return this.redirect(302, "/private/catalog/section/"+section);
 		}else{

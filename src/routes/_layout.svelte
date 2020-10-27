@@ -5,6 +5,7 @@
 </script>
 
 <script>
+	import GoogleAnalytics from '@/components/GoogleAnalytics.svelte';
 	import { stores	} from "@sapper/app";
 	const { preloading, page, session } = stores();
 
@@ -49,6 +50,7 @@
 	<script async src="https://www.googletagmanager.com/gtag/js?id={IDAnalytics}"></script>
 </svelte:head>
 
+<GoogleAnalytics />
 <nav class="navbar fixed-top topnavbar navbar-expand-md navbar-light bg-light">
 	<a class="navbar-brand" href="/">
 		<img src="/logo.svg" width="30" height="30" class="d-inline-block align-top" alt="">

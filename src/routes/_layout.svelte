@@ -5,7 +5,6 @@
 </script>
 
 <script>
-	import GoogleAnalytics from '@/components/GoogleAnalytics.svelte';
 	import { stores	} from "@sapper/app";
 	const { preloading, page, session } = stores();
 
@@ -21,6 +20,14 @@
 	let searchText ="";
 	export let segment
 
+	$: {
+		if (typeof gtag !== "undefined"){
+			gtag("config", IDAnalytics, {
+				page_path: $page.path
+			});
+		}
+	}
+
 	function logout() {
 		$session.user = {};
 		$session.token = undefined;
@@ -31,9 +38,7 @@
 		window.dataLayer = window.dataLayer || [];
 		function gtag(){dataLayer.push(arguments);}
 		gtag('js', new Date());
-		gtag('config', IDAnalytics,  {
-				page_path: $page.path
-			});
+		gtag('config', IDAnalytics, { page_path: $page.path });
 	});
 </script>
 
@@ -51,7 +56,7 @@
 	<script async src="https://www.googletagmanager.com/gtag/js?id={IDAnalytics}"></script>
 </svelte:head>
 
-<GoogleAnalytics />
+
 <nav class="navbar fixed-top topnavbar navbar-expand-md navbar-light bg-light">
 	<a class="navbar-brand" href="/">
 		<img src="/logo.svg" width="30" height="30" class="d-inline-block align-top" alt="">

@@ -26,7 +26,6 @@
 
 	import { onMount } from 'svelte';
 
-
 	export let sections;
 	$: sectionData = sections;
 	$: ogImage = _ogImage(sections);
@@ -35,6 +34,7 @@
 	function onSelectThumb(event){
 		selectedProduct= event.detail;
 	}
+
 	function _ogImage(sectionData){
 		if (sectionData){
 			if (sectionData.IMAFAM && sectionData.IMAFAM!=""){
@@ -140,7 +140,7 @@
 							</div>
 						{/each}
 					</div>
-					<ModalDetails items="{sectionData.items}" selected="{selectedProduct}"></ModalDetails>
+					<ModalDetails items="{sectionData.items}" selected="{selectedProduct}" ></ModalDetails>
 				{/if}
 			{/if}
 			<!-- {:catch error}

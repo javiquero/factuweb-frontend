@@ -7,6 +7,12 @@
 	import { stores } from "@sapper/app"
 	const { session } = stores()
 
+	import { createEventDispatcher } from 'svelte';
+	const dispatch = createEventDispatcher();
+
+	function onShowBigImage(){
+		dispatch('showbigimage', fart);
+	}
 
 	let loadProduct = getProduct()
 	let qty =0;
@@ -47,7 +53,7 @@
 						<div class="row">
 							<div class="col-xl-8 col-lg-6 pl-2 pr-1">
 							<div class="thumb-image media text-center" style="max-height:485px;height:100%;padding:10px;">
-										<img
+										<img on:click="{onShowBigImage}"
 										src="/api/image/1024/{fart.IMGART}"
 										alt="Imagen de la referéncia  {fart.CODART}{fart.CE1ART!="" ? " modelo " + fart.CE1ART: ""}"
 										style="max-width:100%;max-height:100%; margin-left: auto;margin-right: auto;display: block;"

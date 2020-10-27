@@ -42,7 +42,7 @@
 </script>
 
 <div class="fw-thumb-product">
-	<div class="card">
+	<div class="card" id="{product.IMGART}">
 		<div class="card-body fw-card-body" class:incart="{inCart === true}">
 			{#await product}
 				<div class="placeholder-text"></div>
@@ -134,20 +134,20 @@
 									</div>
 								{:else}
 									{#if fart.DIMART != "" ||  fart.PESART != ""}
-								<div style="margin-top:-10px;margin-left: 15px; " >
-										<div style="border-bottom:1px solid #ccc; margin-bottom:5px;text-align: left; max-width:100px">
-											Información
-										</div>
-										<div style="line-height: 1.3; font-size: 14px;text-align: left;">
-											{#if fart.DIMART != ""}
-												<div>Size: <span class="bold">{fart.DIMART} </span></div>
-											{/if}
-											{#if fart.PESART != ""}
-												<div>Peso: <span class="bold">{fart.PESART}gr.</span></div>
-											{/if}
-										</div>
+									<div style="margin-top:-10px;margin-left: 15px; " >
+											<div style="border-bottom:1px solid #ccc; margin-bottom:5px;text-align: left; max-width:100px">
+												Información
+											</div>
+											<div style="line-height: 1.3; font-size: 14px;text-align: left;">
+												{#if fart.DIMART != ""}
+													<div>Size: <span class="bold">{fart.DIMART} </span></div>
+												{/if}
+												{#if fart.PESART != ""}
+													<div>Peso: <span class="bold">{fart.PESART}gr.</span></div>
+												{/if}
+											</div>
 
-									</div>
+										</div>
 									<!-- <div class="price net bold">
 										Entra para ver precios
 									</div> -->

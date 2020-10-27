@@ -47,10 +47,10 @@
 	function _ogImage(sectionData){
 		if (sectionData){
 			if (sectionData.IMAFAM && sectionData.IMAFAM!=""){
-				return $page.protocol + "//" + $page.host + "/api/image/150/" + sectionData.IMAFAM;
+				return $page.protocol + "//" + $page.host + "/api/image/1024/" + sectionData.IMAFAM;
 			}else{
 				if (sectionData.items && sectionData.items.length>0){
-					return $page.protocol + "//" + $page.host + "/api/image/150/" + sectionData.items[0].IMGART;
+					return $page.protocol + "//" + $page.host + "/api/image/1024/" + sectionData.items[0].IMGART;
 				}else{
 					return undefined;
 				}

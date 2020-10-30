@@ -16,6 +16,8 @@
 	import TopbarSearch from "@/components/topbarSearch.svelte";
 	import Footer from "@/components/footer.svelte";
 	import HbarSections from "@/components/hbarSections.svelte";
+	import Cookies from "@/components/cookies.svelte";
+
 
 	let searchText ="";
 	export let segment
@@ -37,8 +39,17 @@
 	}
 
 	onMount(async () => {
+		document.querySelectorAll('a').forEach(a => {
+			if (!a.hash || !document.querySelectorAll(a.hash).length) return
+			a.addEventListener('click', event => {
+				event.preventDefault()
+				window.location.hash = event.target.getAttribute('href')
+			event.target.scrollIntoView()
+			})
+		})
+
 		window.dataLayer = window.dataLayer || [];
-		gtag = function (){dataLayer.push(arguments);}
+		gtag = function(){dataLayer.push(arguments);}
 		gtag('js', new Date());
 		gtag('config', IDAnalytics, { page_path: $page.path });
 	});
@@ -119,8 +130,11 @@
 		<div class="d-block d-md-none" style="height:49px;"></div>
 		<HbarSections />
 	{/if}
+		<Cookies />
   <slot />
 </div>
+
+
 
 
 <Footer></Footer>

@@ -7,6 +7,7 @@
 	let hash;
 
 	function _goToHash(_hash){
+		if (_hash=="") return;
 		hash = _hash;
 		window.location.hash = _hash
 		document.getElementById(_hash).scrollIntoView(true);
@@ -29,7 +30,7 @@
 	}
 
 	onMount(async () => {
-		hash = window.location.hash.substring(1);
+		_goToHash( window.location.hash.substring(1));
 
 		window.onscroll=function () {
 			let elements = document.getElementsByClassName('hash-link');
@@ -81,7 +82,7 @@
 		<div class="cookies-text">
 			<div class="container">
 				<div class="row">
-					<div class="col-md-4">
+					<div class="col-lg-4 d-none d-lg-block">
 						<div id="menufixed" class="list-group">
 							<button on:click={()=>_goToHash('uso')} type="button" class="list-group-item list-group-item-action {hash=='uso'?'active':''}">Uso en {$session.info.NOMEMP || siteName}</button>
 							<button on:click={()=>_goToHash('seg')} type="button" class="list-group-item list-group-item-action {hash=='seg'?'active':''}">Seguridad/Autenticación</button>
@@ -92,10 +93,10 @@
 							<button on:click={()=>_goToHash('pol')} type="button" class="list-group-item list-group-item-action {hash=='pol'?'active':''}" >Cambios en la Política de Cookies</button>
 						</div>
 					</div>
-					<div class="col-md-8 text-justify" >
+					<div class="col-lg-8 text-justify" >
 						<h3 class="hash-link" id="uso">Uso en {$session.info.NOMEMP || siteName}</h3>
 
-						<p>
+						<p style="font-weight: bold;font-size: 18px;">
 						En resumen, {$session.info.NOMEMP || siteName} utiliza cookies y otras tecnologías de seguimiento para prestar su servicio. Aunque las cookies no son imprescindibles para que el sitio web funcione, si las habilitas disfrutarás de una mejor experiencia de navegación. Si decides borrar o bloquear las cookies, es posible que algunas de las funciones de este sitio web no se ejecuten correctamente.</p>
 						<p>Las cookies no se utilizan para identificarte personalmente ni para otros fines que no sean los descritos en este documento.</p>
 
@@ -138,12 +139,24 @@
 				position: sticky;
 				top:100px;
 				z-index: 1;
+				button {
+					background-color: white;
+					color:black;
+    				border:none !important;
+					padding-top: 5px;
+    				padding-bottom: 5px;
+					&:active{
+						border: none;
+						// border-color: white !important;
+					}
+					&.active{
+						    background-color: white;
+    						color: rgb(255, 66, 77);
+					}
+				}
 			}
 
-			a {color: black;}
-			.selected{
-				color: rgb(255,66,77);;
-			}
+
 			h1, h3{
 				font-weight: bold;
 				margin-bottom:20px;

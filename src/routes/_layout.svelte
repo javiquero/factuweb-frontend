@@ -130,7 +130,9 @@
 		<div class="d-block d-md-none" style="height:49px;"></div>
 		<HbarSections />
 	{/if}
+	{#if $session.cookies==undefined}
 		<Cookies />
+	{/if}
   <slot />
 </div>
 

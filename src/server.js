@@ -54,7 +54,7 @@ async function authenticationMiddleware(req, res, next) {
             req.token = cookies.get('fw-token')
         }
 	}
-
+	req.cookies = cookies.get('fw-cookies');
 	req.info = await get('info', null);
     next();
 }
@@ -72,6 +72,7 @@ polka()
         apiProxy,
 		sapper.middleware({
 			session: (req, res) => ({
+				cookies : req.cookies,
 				info: req.info,
                 user: req.user || {},
                 token: req.token

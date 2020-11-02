@@ -91,7 +91,7 @@
 		<div class="main-logo" ></div>
 		<span>Bienvenido a {$session.info.NOMEMP || siteName}!</span>
 		<p>No lo pienses más y entra a ver nuestro catálogo</p>
-		<a href="/section/0" class="btn btn-primary">Ver catálogo</a>
+		<a href="/catalog" class="btn btn-primary">Ver catálogo</a>
 	</div>
 
 	<section >

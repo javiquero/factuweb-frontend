@@ -1,16 +1,29 @@
+<script>
+	import { stores, goto } from '@sapper/app'
+	const { session } = stores()
+
+	import { fwCookies } from '@/store/cookies.js'
+
+	async function acceptCookies(){
+		let resp = await fwCookies.accept();
+		$session.cookies = resp;
+	}
+</script>
+
+{#if $session.cookies==undefined || $session.cookies==""}
 <div class="cookies-bar">
 	<div class="container">
 		<div class="row">
 			<div class="col">
 				<i class="fal fa-cookie-bite"></i>
 				<span >Usamos cookies para mejorar tu experiencia de usuario. <a href="/cookies" class="">Más información</a></span>
-				<button type="button" class="btn btn-dark">Aceptar</button>
+				<button type="button" on:click={acceptCookies} class="btn btn-dark">Aceptar</button>
 			</div>
 		</div>
 	</div>
 
 </div>
-
+{/if}
 
 <style lang="scss">
 	.cookies-bar{

@@ -40,9 +40,6 @@
 		}
 		a.section-link {
 			color:black;
-			// &:hover{
-			// 	text-decoration: none;
-			// }
 		}
 </style>
 

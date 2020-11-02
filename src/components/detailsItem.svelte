@@ -4,7 +4,7 @@
 	import { formatCurrency } from './../lib/functions'
 	import AddCart from "./addCart.svelte";
 	import { showSpecialPrices } from "@/config.js";
-	import { stores } from "@sapper/app"
+	import { goto, stores } from "@sapper/app"
 	const { session } = stores()
 
 	import { createEventDispatcher } from 'svelte';
@@ -19,6 +19,10 @@
 	$: { loadProduct = getProduct(fart)}
 	async function getProduct() {
 		if (fart != {} && fart != undefined) return (fart = fart)
+	}
+	async function gotoLogin(){
+		await goto('/login');
+
 	}
 </script>
 
@@ -149,8 +153,10 @@
 									</div>
 									<AddCart fart={fart} showCant="{true}"></AddCart>
 									{:else}
-										<div class="price net bold">
-										Entra para ver los precios
+										<div on:click={gotoLogin} data-dismiss="modal"  class="price net bold" style="cursor:pointer;">
+										<!-- <a href="/login" style="color:white" > -->
+											Entra para ver los precios
+										<!-- </a> -->
 										</div>
 									{/if}
 								</div>

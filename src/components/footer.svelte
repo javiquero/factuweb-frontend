@@ -17,7 +17,7 @@
 		 <div class="col-xs-12 col-sm-6 col-md-4">
 				<h3 >Políticas</h3>
 				<ul >
-					<li><a href="/cookies">Pólitica de cookies</a></li>
+					<li><a href="/cookies">Política de cookies</a></li>
 				</ul>
             </div>
             <div class="col-xs-12 col-sm-6 col-md-4">

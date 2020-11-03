@@ -55,15 +55,25 @@
 			}
 		}
 		.section-title{
-			background-color: #f5f5f7;
-			width:100%;
-			min-height:150px;
-			padding: 40px;
+	margin-top: 30px;
 		}
+
+
 		a.section-link {
 			color:black;
+			text-decoration: none;
+			display: block;
+			background-color: #fff;
+			border-radius: 5px;
+			border: 1px solid rgba(195,195,195,.13);
+			padding: 20px;
+			height: 100%;
+			-webkit-box-shadow: 0 1px 6px rgba(195,195,195,.13);
+			-moz-box-shadow: 0 1px 6px rgba(195,195,195,.13);
+			transition: all .3s ease;
+			-webkit-transition: all .3s ease-in-out;
 			&:hover{
-				text-decoration: none;
+				box-shadow: 0 6px 8px rgba(0,0,0,.13);
 			}
 		}
 	}
@@ -111,23 +121,20 @@
 					<section>
 						<div class="section-title" >
 							<div class="container">
-								<h1 class="text-center">
+								<h1 >
 									<strong><i class="fad fa-images"></i> {familiesData[section].DESSEC}</strong>
 								</h1>
 							</div>
 						</div>
 					</section>
 					<section >
-						<div class="container">
+						<div class="container" style="background-color: #fdfdfd;">
 							<dir class="row">
 								{#each familiesData[section].fam as fam}
-									<div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3 text-center mb-5">
+									<div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3 text-center mb-3">
 										<a class="section-link" href="/section/{fam.CODFAM}">
-											<div style="width:90%; height:200px;  text-center ">
-												<img src="/api/image/1024/{fam.IMG}"
-													alt="Imagen de la sección  {fam.DESFAM}"
-													style="max-width:100%;max-height:100%; margin-left: auto;margin-right: auto;display: block;"
-													class="align-self-center " />
+											<div  class="row align-items-center" style="width:90%; height:200px; margin-left: 5%;">
+												<img src="/api/image/1024/{fam.IMG}" alt="Imagen de la sección {fam.DESFAM}" style="max-width:100%;max-height:100%; margin-left: auto;margin-right: auto;display: block;" class="align-self-center " />
 											</div>
 											<h5>{fam.DESFAM}</h5>
 										</a>

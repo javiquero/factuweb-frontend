@@ -112,7 +112,7 @@
 							<div class="prices">
 								{#if $session.token}
 									<div class="price-top">
-										{#if product.price.dto>0 && showSpecialPrices==true}
+										{#if product.price && product.price.dto>0 && showSpecialPrices==true}
 										<div class="price brut">
 											Precio bruto:
 											<span class="bold">{formatCurrency(product.price.price)}</span>

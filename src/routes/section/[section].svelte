@@ -15,7 +15,7 @@
 
 <script>
 
-	import { stores	} from "@sapper/app";
+	import { goto, stores	} from "@sapper/app";
 	const { preloading, page, session } = stores();
 
 	import ThumbItem from "@/components/thumbItem.svelte";
@@ -38,10 +38,10 @@
 	function _ogImage(sectionData){
 		if (sectionData){
 			if (sectionData.IMAFAM && sectionData.IMAFAM!=""){
-				return $page.protocol + "//" + $page.host + "/api/image/1024/" + sectionData.IMAFAM;
+				return  "http://" + $page.host + "/api/image/1024/" + sectionData.IMAFAM;
 			}else{
 				if (sectionData.items && sectionData.items.length>0){
-					return $page.protocol + "//" + $page.host + "/api/image/1024/" + sectionData.items[0].IMGART;
+					return  "http://" + $page.host + "/api/image/1024/" + sectionData.items[0].IMGART;
 				}else{
 					return undefined;
 				}
@@ -84,14 +84,14 @@
 	<meta data-hid="og:description" name="og:description" content="Sección {sectionData?sectionData.DESFAM:''} del catálogo de {$session.info.NOMEMP || siteName}" />
 	<meta data-hid="og:title" name="og:title" content="{sectionData?sectionData.DESFAM:''} · {$session.info.NOMEMP || siteName}" />
 	{#if ogImage!=undefined}
-	<meta data-hid="og:image" name="og:image" content="{ogImage}" />
+		<meta data-hid="og:image" name="og:image" content="{ogImage}" />
 	{/if}
 
 </svelte:head>
 
 <main>
 	<section class="items-section">
-		<div class="container-xl">
+		<div class="container">
 		{#if $preloading}
 			<div class="row">
 					<div class="col mb-3">
@@ -104,43 +104,44 @@
 
 			<div class="row">
 				{#each Array(9) as _, i}
-					<div class="col-xs-12 col-sm-6 col-lg-4 col-xl-4"><PreThumbItem /></div>
+					<div class="col col-sm-6 col-lg-4 col-xl-4"><PreThumbItem /></div>
 				{/each}
 			</div>
-		{/if}
-		{#if sectionData.items}
-				<div id="sectionarrows" class="row justify-content-between mb-4" >
-					<div class="col-3">
-						<a class="btn btn-light btn-block" href="/section/{sectionData.inf.previous}" role="button"><i class="fas fa-chevron-left"></i></a>
-					</div>
-					<div class="col-3">
-						<a class="btn btn-light btn-block" href="/section/{sectionData.inf.next}" role="button"><i class="fas fa-chevron-right"></i></a>
-					</div>
-				</div>
-				<div class="row">
-					<div class="col-8 mb-3">
-						<h1>{sectionData.DESFAM}</h1>
-					</div>
-					<div class="col-4 text-right">
-					</div>
-				</div>
-
-				{#if sectionData.items.length == 0}
-					<div class="row">
-						<div class="col">
-							No se han encontrado artículos o ha habido un problema al
-							recuperar la información del servidor.
+		{:else}
+			{#if sectionData.items}
+					<div id="sectionarrows" class="row justify-content-between mb-4" >
+						<div class="col-3">
+							<button class="btn btn-light btn-block" on:click={()=>{goto("/section/" + sectionData.inf.previous)}} role="button"><i class="fas fa-chevron-left"></i></button>
+						</div>
+						<div class="col-3">
+							<button class="btn btn-light btn-block" on:click={()=>{goto("/section/" + sectionData.inf.next)}} role="button"><i class="fas fa-chevron-right"></i></button>
 						</div>
 					</div>
-				{:else}
 					<div class="row">
-						{#each sectionData.items as item}
-							<div class="col col-sm-6 col-lg-4 col-xl-4">
-								<ThumbItem on:select="{onSelectThumb}" fart={item} />
-							</div>
-						{/each}
+						<div class="col-8 mb-3">
+							<h1>{sectionData.DESFAM}</h1>
+						</div>
+						<div class="col-4 text-right">
+						</div>
 					</div>
-					<ModalDetails items="{sectionData.items}" selected="{selectedProduct}" ></ModalDetails>
+
+					{#if sectionData.items.length == 0}
+						<div class="row">
+							<div class="col">
+								No se han encontrado artículos o ha habido un problema al
+								recuperar la información del servidor.
+							</div>
+						</div>
+					{:else}
+						<div class="row">
+							{#each sectionData.items as item}
+								<div class="col col-sm-6 col-lg-4 col-xl-4">
+									<ThumbItem on:select="{onSelectThumb}" fart={item} />
+								</div>
+							{/each}
+						</div>
+						<ModalDetails items="{sectionData.items}" selected="{selectedProduct}" ></ModalDetails>
+					{/if}
 				{/if}
 			{/if}
 			<!-- {:catch error}

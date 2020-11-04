@@ -8,7 +8,7 @@
 </script>
 <script>
 	import { siteName } from "@/config.js";
-	import { stores	} from "@sapper/app";
+	import { goto, stores } from "@sapper/app";
 	const {session} = stores();
 </script>
 
@@ -91,7 +91,7 @@
 		<div class="main-logo" ></div>
 		<span>Bienvenido a {$session.info.NOMEMP || siteName}!</span>
 		<p>No lo pienses más y entra a ver nuestro catálogo</p>
-		<a href="/catalog" class="btn btn-primary">Ver catálogo</a>
+		<button on:click={()=>{goto("/catalog")}} class="btn btn-primary"> Ver catálogo</button>
 	</div>
 
 	<section >

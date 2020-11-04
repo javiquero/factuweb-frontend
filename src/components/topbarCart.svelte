@@ -57,7 +57,7 @@
 		</div>
 	</div>
 
-
+{#if $cart.outOfCart}
 	<div class="modal fade" id="ModalRemoveFromCart" tabindex="-1" role="dialog" aria-labelledby="ModalRemoveFromCartTitle" aria-hidden="true">
 		<div class="modal-dialog modal-dialog-scrollable modal-lg modal-dialog-centered" role="document">
 			<div class="modal-content">
@@ -100,6 +100,7 @@
 			</div>
 		</div>
 	</div>
+{/if}
 <!-- </main> -->
 <script>
 import { cart } from "./../store/cart.js";

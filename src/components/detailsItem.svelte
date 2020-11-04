@@ -1,6 +1,4 @@
 <script>
-	export let fart = {};
-
 	import { formatCurrency } from './../lib/functions'
 	import AddCart from "./addCart.svelte";
 	import { showSpecialPrices } from "@/config.js";
@@ -11,15 +9,14 @@
 	const dispatch = createEventDispatcher();
 
 	function onShowBigImage(){
-		dispatch('showbigimage', fart);
+		dispatch('showbigimage', item);
 	}
 
-	let loadProduct = getProduct()
 	let qty =0;
-	$: { loadProduct = getProduct(fart)}
-	async function getProduct() {
-		if (fart != {} && fart != undefined) return (fart = fart)
-	}
+	export let fart ;
+	$: item = fart ;
+
+
 	async function gotoLogin(){
 		await goto('/login');
 
@@ -28,160 +25,143 @@
 
 <div class="fw-details-product">
 	<div class="container">
-				{#await loadProduct}
-					<h3>Cargando... espera</h3>
-				{:then fart}
-					{#if !fart || fart == {}}
-						<h3 >
-							Error! ha sido imposible recuperar las la información del producto
-						</h3>
-					{:else}
-						<div class="row">
-							<div class="col pl-2 pr-2 " style="font-size:18px; height: 30px; overflow-y: hidden;padding-left: -0px!important;">
-								<div class="description">
-									{fart.DESART}
-								</div>
-							</div>
-						</div>
-						<div class="row">
-							<div class="col pl-2 pr-2 mb-2">
-								<div class="ref bold">{fart.CODART}</div>
-								{#if fart.EANART != ""}
-                					<div class="ean bold">{fart.EANART}</div>
-								{/if}
-								{#if fart.CE1ART != ""}
-									<div class="mod bold">Modelo: {fart.CE1ART}</div>
-								{/if}
-							</div>
-						</div>
-						<div class="row">
-							<div class="col-xl-8 col-lg-6 pl-2 pr-1">
-							<div class="thumb-image media text-center" style="max-height:485px;height:100%;padding:10px;">
-										<img on:click="{onShowBigImage}"
-										src="/api/image/1024/{fart.IMGART}"
-										alt="Imagen de la referéncia  {fart.CODART}{fart.CE1ART!="" ? " modelo " + fart.CE1ART: ""}"
-										style="max-width:100%;max-height:100%; margin-left: auto;margin-right: auto;display: block;"
-										class="align-self-center " />
-									</div>
-								<!-- <div class="thumb-image media text-center " style="background-image: url('/api/image/1024/{fart.CODART}'); background-size: cover;    background-size: contain;    background-repeat: no-repeat;    background-position: center;">
-									<!-- <img
-									src="/api/image/1024/{fart.CODART}"
-									alt="Imagen de la referéncia {fart.CODART}"
-									style="width:90%;"
-									class="align-self-center mr-3" /> --
-								</div> -->
-								{#if $session.token}
-									<div style="position: absolute;bottom: 0px;">
-										<a href="/api/image/download/photo/{fart.IMGART}" class="btn btn-light btn-sm"  role="button" >
-											Descargar imagen
-										</a>
-									</div>
-								{/if}
-							</div>
-							<div class="col-xl-4 col-lg-6 pl-2 pr-2 ">
-								<div class="row">
-									<div class="col packing">
-										<div style="border-bottom:1px solid #ccc; margin-bottom:5px;">
-											Embalaje
-										</div>
-										<div>
-											<div class="mini-box">
-												<img src="/img/mini-box.png" alt="" />
-												<span class="bold">{fart.UELART}</span> unidades
-											</div>
-											{#if fart.UPPART != 0 && fart.UPPART != fart.UELART}
-												<div class="big-box">
-													<img src="/img/big-box.png" alt="" />
-													<span class="bold">{fart.UPPART}</span> unidades
-												</div>
-											{:else}
-												<div class="big-box">
-													<span class="bold">&nbsp;</span>
-												</div>
-											{/if}
-
-											{#if fart.price && fart.price.dto > 0 && showSpecialPrices==true}
-												<div class="price brut">
-													Bruto:
-													<span class="bold">{formatCurrency(fart.price.price)}</span>
-												</div>
-													<div class="price remise">
-													Descuento:
-													<span class="bold">{fart.price.dto} %</span>
-												</div>
-											{/if}
-										</div>
-									</div>
-									<div class="col">
-										<div style="border-bottom:1px solid #ccc; margin-bottom:5px;">
-											Información
-										</div>
-										<div style="line-height: 1.3; font-size: 14px;">
-											{#if fart.DIMART != ""}
-												<div>Size: <span class="bold">{fart.DIMART} </span></div>
-											{/if}
-											{#if fart.PESART != ""}
-												<div>Peso: <span class="bold">{fart.PESART}gr.</span></div>
-											{/if}
-										</div>
-
-									</div>
-								</div>
-
-								<div class="prices">
-								{#if $session.token}
-									<div class="price-top">
-									{#if fart.price && fart.price.dto > 0 && showSpecialPrices==true}
-										<div class="price brut">
-											Precio bruto:
-											<span class="bold">{formatCurrency(fart.price.price)}</span>
-										</div>
-										<div class="price remise">
-											Descuento:
-											<span class="bold">{fart.price.dto} %</span>
-										</div>
-									{/if}
-									</div>
-									<div class="price net bold">
-										{#if showSpecialPrices==true}
-											<div>Precio neto</div>
-											{formatCurrency(fart.price?fart.price.clientPrice:0)}
-										{:else}
-											<div>Precio</div>
-											{formatCurrency(fart.price?fart.price.price:0)}
-										{/if}
-									</div>
-									<AddCart fart={fart} showCant="{true}"></AddCart>
-									{:else}
-										<div on:click={gotoLogin} data-dismiss="modal"  class="price net bold" style="cursor:pointer;">
-										<!-- <a href="/login" style="color:white" > -->
-											Entra para ver los precios
-										<!-- </a> -->
-										</div>
-									{/if}
-								</div>
-								<div class="despcritions pl-4" >
-									<div class="mt-3 ">
-										{#if fart.DEWART != ""  ||  fart.DLAART != ""}
-											<span class="title">Descripción:</span> <br>
-											{fart.DEWART || fart.DLAART}
-										{/if}
-									</div>
-									<div class="mt-3" style="white-space: pre-wrap;">
-										{#if fart.OBSART != ""}
-											<span class="title">Características:</span> <br>
-											{`${fart.OBSART}`}
-										{/if}
-									</div>
-								</div>
-
-							</div>
+		{#if item && Object.keys(item).length >1}
+			<div class="row">
+				<div class="col pl-2 pr-2 " style="font-size:18px; height: 30px; overflow-y: hidden;padding-left: -0px!important;">
+					<div class="description">
+						{item.DESART}
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col pl-2 pr-2 mb-2">
+					<div class="ref bold">{item.CODART}</div>
+					{#if item.EANART != ""}
+						<div class="ean bold">{item.EANART}</div>
+					{/if}
+					{#if item.CE1ART != ""}
+						<div class="mod bold">Modelo: {item.CE1ART}</div>
+					{/if}
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-xl-8 col-lg-6 pl-2 pr-1">
+				<div class="thumb-image media text-center" style="max-height:485px;height:100%;padding:10px;cursor:pointer">
+					<img on:click="{onShowBigImage}"
+					src="/api/image/1024/{item.IMGART}"
+					alt="Imagen de la referéncia  {item.CODART}{item.CE1ART!="" ? " modelo " + item.CE1ART: ""}"
+					style="max-width:100%;max-height:100%; margin-left: auto;margin-right: auto;display: block;"
+					class="align-self-center " />
+				</div>
+					{#if $session.token}
+						<div style="position: absolute;bottom: 0px;">
+							<a href="/api/image/download/photo/{item.IMGART}" class="btn btn-light btn-sm"  role="button" >
+								Descargar imagen
+							</a>
 						</div>
 					{/if}
-				{:catch error}
-					<p style="color: red">{error.message}</p>
-				{/await}
+				</div>
+				<div class="col-xl-4 col-lg-6 pl-2 pr-2 ">
+					<div class="row">
+						<div class="col packing">
+							<div style="border-bottom:1px solid #ccc; margin-bottom:5px;">
+								Embalaje
+							</div>
+							<div>
+								<div class="mini-box">
+									<img src="/img/mini-box.png" alt="" />
+									<span class="bold">{item.UELART}</span> unidades
+								</div>
+								{#if item.UPPART != 0 && item.UPPART != item.UELART}
+									<div class="big-box">
+										<img src="/img/big-box.png" alt="" />
+										<span class="bold">{item.UPPART}</span> unidades
+									</div>
+								{:else}
+									<div class="big-box">
+										<span class="bold">&nbsp;</span>
+									</div>
+								{/if}
+
+								{#if item.price && item.price.dto > 0 && showSpecialPrices==true}
+									<div class="price brut">
+										Bruto:
+										<span class="bold">{formatCurrency(item.price.price)}</span>
+									</div>
+										<div class="price remise">
+										Descuento:
+										<span class="bold">{item.price.dto} %</span>
+									</div>
+								{/if}
+							</div>
+						</div>
+						<div class="col">
+							<div style="border-bottom:1px solid #ccc; margin-bottom:5px;">
+								Información
+							</div>
+							<div style="line-height: 1.3; font-size: 14px;">
+								{#if item.DIMART != ""}
+									<div>Size: <span class="bold">{item.DIMART} </span></div>
+								{/if}
+								{#if item.PESART != ""}
+									<div>Peso: <span class="bold">{item.PESART}gr.</span></div>
+								{/if}
+							</div>
+
+						</div>
+					</div>
+
+					<div class="prices">
+					{#if $session.token}
+						<div class="price-top">
+						{#if item.price && item.price.dto > 0 && showSpecialPrices==true}
+							<div class="price brut">
+								Precio bruto:
+								<span class="bold">{formatCurrency(item.price.price)}</span>
+							</div>
+							<div class="price remise">
+								Descuento:
+								<span class="bold">{item.price.dto} %</span>
+							</div>
+						{/if}
+						</div>
+						<div class="price net bold">
+							{#if showSpecialPrices==true}
+								<div>Precio neto</div>
+								{formatCurrency(item.price?item.price.clientPrice:0)}
+							{:else}
+								<div>Precio</div>
+								{formatCurrency(item.price?item.price.price:0)}
+							{/if}
+						</div>
+						<AddCart item={item} showCant="{true}"></AddCart>
+						{:else}
+							<div on:click={gotoLogin} data-dismiss="modal"  class="price net bold" style="cursor:pointer;">
+							<!-- <a href="/login" style="color:white" > -->
+								Entra para ver los precios
+							<!-- </a> -->
+							</div>
+						{/if}
+					</div>
+					<div class="despcritions pl-4" >
+						<div class="mt-3 ">
+							{#if item.DEWART != ""  ||  item.DLAART != ""}
+								<span class="title">Descripción:</span> <br>
+								{item.DEWART || item.DLAART}
+							{/if}
+						</div>
+						<div class="mt-3" style="white-space: pre-wrap;">
+							{#if item.OBSART != ""}
+								<span class="title">Características:</span> <br>
+								{`${item.OBSART}`}
+							{/if}
+						</div>
+					</div>
+
+				</div>
 			</div>
+		{/if}
+	</div>
 
 </div>
 

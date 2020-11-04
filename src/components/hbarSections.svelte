@@ -38,7 +38,7 @@
 		.navbar-nav .nav-link,
 		.dropdown-item {
 			color: #555;
-			font-weight: 400;
+			font-weight: bold;
 			font-size: 12px;
 
 		}

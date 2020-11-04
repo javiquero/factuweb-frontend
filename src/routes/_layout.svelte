@@ -60,11 +60,11 @@
   	<meta data-hid="description" name="description" content="{SEO.description}" />
    	<meta data-hid="title" name="title" content="{SEO.title}" />
 
-	<meta data-hid="og:description" name="og:description" content="{SEO.description}" />
-   	<meta data-hid="og:title" name="og:title" content="{SEO.title}" />
-	<meta data-hid="og:image" name="og:image" content="http://{$page.host}/{SEO.image}" />
-	<meta data-hid="og:url" name="og:url" content="http://{$page.host}" />
-	<meta data-hid="og:locale" name="og:locale" content="{SEO.locale}" />
+	<meta property="og:description"  data-hid="og:description" name="og:description" content="{SEO.description}" />
+   	<meta property="og:title"  data-hid="og:title" name="og:title" content="{SEO.title}" />
+	<meta property="og:image"  data-hid="og:image" name="og:image" content="http://{$page.host}/{SEO.image}" />
+	<meta property="og:url"  data-hid="og:url" name="og:url" content="http://{$page.host}" />
+	<meta property="og:locale"  data-hid="og:locale" name="og:locale" content="{SEO.locale}" />
 
 	<script async src="https://www.googletagmanager.com/gtag/js?id={IDAnalytics}"></script>
 </svelte:head>

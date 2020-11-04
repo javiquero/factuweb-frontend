@@ -38,6 +38,7 @@
 
 	onMount(async () => {
 		if (items.length<1) goto('/private')
+		window.$("#ModalFinaliceOrder").appendTo("body");
 	});
 
 	function onSelectLine(item){
@@ -60,6 +61,9 @@
 		event.stopPropagation();
 	}
 
+	function finishOrder(){
+
+	}
 
 </script>
 
@@ -95,7 +99,7 @@
 						<button class="btn btn-fw btn-light btn-block" type="button" data-toggle="modal" data-target="#ModalRemoveCart" >
 							Vaciar carro <i style="float: right; line-height: 22px;" class="fal fa-shopping-basket"></i>
 						</button>
-						<button class="btn btn-success  btn-block" disabled type="button" >
+						<button class="btn btn-success  btn-block" type="button" data-toggle="modal" data-target="#ModalFinaliceOrder"  >
 							Terminar pedido <i style="float: right; line-height: 22px;" class="fal fa-shopping-basket"></i>
 						</button>
 					</div>
@@ -170,6 +174,30 @@
 
 	</section>
 
+<!-- Modal -->
+	<div class="modal fade" id="ModalFinaliceOrder" tabindex="-1" role="dialog" aria-labelledby="ModalFinaliceOrderTitle" aria-hidden="true">
+		<div class="modal-dialog modal-dialog-centered" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="ModalFinaliceOrderTitle">
+						<svg style="width:30px; height:30px;" aria-hidden="true" focusable="false" data-prefix="fad" data-icon="exclamation-triangle" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512" class="svg-inline--fa fa-exclamation-triangle fa-w-18 fa-3x"><g class="fa-group"><path fill="#ccc" d="M569.52 440L329.58 24c-18.44-32-64.69-32-83.16 0L6.48 440c-18.42 31.94 4.64 72 41.57 72h479.89c36.87 0 60.06-40 41.58-72zM288 448a32 32 0 1 1 32-32 32 32 0 0 1-32 32zm38.24-238.41l-12.8 128A16 16 0 0 1 297.52 352h-19a16 16 0 0 1-15.92-14.41l-12.8-128A16 16 0 0 1 265.68 192h44.64a16 16 0 0 1 15.92 17.59z" class="fa-secondary"></path><path fill="white" d="M310.32 192h-44.64a16 16 0 0 0-15.92 17.59l12.8 128A16 16 0 0 0 278.48 352h19a16 16 0 0 0 15.92-14.41l12.8-128A16 16 0 0 0 310.32 192zM288 384a32 32 0 1 0 32 32 32 32 0 0 0-32-32z" class="fa-primary"></path></g></svg>
+						<span style="margin-left: 10px;margin-top: 5px; position: absolute;">Atención</span>
+					</h5>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body">
+					¿ Deseas dar por finalizado el pedido ?<br/>
+					<small>Esta acción es irreversible</small>
+				</div>
+				<div class="modal-footer" style="border-top:none;">
+					<button type="button" class="btn btn-primary" data-dismiss="modal">Cancelar</button>
+					<button type="button" class="btn btn-success" data-dismiss="modal" on:click="{finishOrder}">Si, finalizar</button>
+				</div>
+			</div>
+		</div>
+	</div>
 </div>
 </main>
 

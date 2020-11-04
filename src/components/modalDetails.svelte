@@ -69,7 +69,7 @@
 		// prevent(event);
 		if (event.key == "Enter"){
 			if ( selected == undefined ){
-				selected = items[0];
+				// selected = items[0];
 			}else{
 				showBig = true;
 			}
@@ -81,8 +81,7 @@
 				}else{
 					hideModal();
 				}
-			}else
-			if (event.key == "ArrowRight"){
+			}else if (event.key == "ArrowRight"){
 				gotoNext();
 			}else if (event.key == "ArrowLeft"){
 				gotoPrevious()

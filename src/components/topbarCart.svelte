@@ -110,7 +110,8 @@ import { onMount } from 'svelte';
 
 onMount(async () => {
 	window.$("#ModalRemoveCart").appendTo("body");
-		window.$("#ModalRemoveFromCart").appendTo("body");
+	window.$("#ModalRemoveFromCart").appendTo("body");
+
 	window.$('.topbarcart').on('show.bs.dropdown', function (e) {
 		if ($cart.items.length>0){
 			visible=true;

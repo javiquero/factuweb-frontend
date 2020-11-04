@@ -11,6 +11,7 @@
 	$: qty = getInCart($cart, fart);
 
 	const onInputChange = function() {
+		console.log("OnInputChange");
 		if(!isNaN(this.value)){
 			setCartQty(parseInt(this.value));
 		}else{

@@ -62,8 +62,8 @@
 
 	<meta data-hid="og:description" name="og:description" content="{SEO.description}" />
    	<meta data-hid="og:title" name="og:title" content="{SEO.title}" />
-	<meta data-hid="og:image" name="og:image" content="{$page.protocol}//{$page.host}/{SEO.image}" />
-	<meta data-hid="og:url" name="og:url" content="{$page.protocol}//{$page.host}" />
+	<meta data-hid="og:image" name="og:image" content="http://{$page.host}/{SEO.image}" />
+	<meta data-hid="og:url" name="og:url" content="http://{$page.host}" />
 	<meta data-hid="og:locale" name="og:locale" content="{SEO.locale}" />
 
 	<script async src="https://www.googletagmanager.com/gtag/js?id={IDAnalytics}"></script>

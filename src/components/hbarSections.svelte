@@ -15,7 +15,7 @@
 				let c = await get(`catalog`);
 				return resolve(c);
 			} catch (error) {
-				console.log(error);
+				console.error(error);
 				return reject(error);
 			}
 		});
@@ -65,7 +65,7 @@
 						<a class="nav-link dropdown-toggle" href="/#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 							{s.DESSEC}
 						</a>
-						<div class="dropdown-menu" aria-labelledby="navbarDropdown" style="position:absolute;">
+						<div  class="dropdown-menu" aria-labelledby="navbarDropdown" style="position:absolute;">
 							{#each s.fam as f}
 								{#if $session.token}
                                     <a class="dropdown-item" href="/private/catalog/section/{f.CODFAM}"> {f.DESFAM}</a>

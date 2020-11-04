@@ -4,11 +4,11 @@
 	import { cart } from "@/store/cart.js";
 
 	export let fart = {};
-	export const variant = undefined;
 	export let showCant = false;
 
 	let qty = 0;
-	$: qty = getInCart($cart);
+	$: item = fart;
+	$: qty = getInCart($cart, fart);
 
 	const onInputChange = function() {
 		if(!isNaN(this.value)){
@@ -17,8 +17,9 @@
 			this.value = 0;
 		}
 	}
-	function getInCart(x){
-		let found = x.items.find(element => element.CODART == fart.CODART && element.CE1ART == fart.CE1ART);
+	function getInCart(x, f){
+		if (!item) return 0;
+		let found = x.items.find(element => element.CODART == item.CODART && element.CE1ART == item.CE1ART);
 		if (!found ) return 0;
 		showCant=true;
 		return found.qty;
@@ -28,32 +29,32 @@
 		window.$('[data-toggle="tooltip"]').tooltip('hide')
 	}
 	async function add(){
-		let q = qty + fart.UELART;
+		let q = qty + item.UELART;
 		setCartQty(q);
 	}
 	function addbox(event){
 		let q = qty;;
-		if (event.detail.first) q -= fart.UELART;
-		q += fart.UPPART||fart.UELART;
+		if (event.detail.first) q -= item.UELART;
+		q += item.UPPART||item.UELART;
 		setCartQty(q);
 	}
 	function quit(){
-		let q = qty - fart.UELART;
+		let q = qty - item.UELART;
 		if (q<0 )q=0;
 		setCartQty(q);
 	}
 	function quitbox(event){
 		let q = qty;
-		if (event.detail.first) q += fart.UELART;
-		q -= fart.UPPART||fart.UELART;
+		if (event.detail.first) q += item.UELART;
+		q -= item.UPPART||item.UELART;
 		if (q<0 )q=0;
 		setCartQty(q);
 	}
 
 	function setCartQty(q){
-		// console.log(`Save ${fart.CODART} ${q} pieces.`);
-		fart.type=0;
-		cart.set({item:fart, qty: q});
+		// console.log(`Save ${item.CODART} ${q} pieces.`);
+		item.type=0;
+		cart.set({item:item, qty: q});
 	}
 
 	function prevent(event){
@@ -134,7 +135,7 @@
 </style>
 
 <div class="fw-add-to-cart">
-	{#if fart.FAMART!="" && fart.SUWART==1}
+	{#if item.FAMART!="" && item.SUWART==1}
 		<div class="container-add-btn">
 			{#if !showCant}
 				<div class="col col-12 pr-0">

@@ -50,7 +50,7 @@
 					<img on:click="{onShowBigImage}"
 					src="/api/image/1024/{item.IMGART}"
 					alt="Imagen de la referéncia  {item.CODART}{item.CE1ART!="" ? " modelo " + item.CE1ART: ""}"
-					style="max-width:100%;max-height:100%; margin-left: auto;margin-right: auto;display: block;"
+					style="max-width:100%;max-height:100%; margin-left: auto;margin-right: auto;display: block; cursor:zoom-in;"
 					class="align-self-center " />
 				</div>
 					{#if $session.token}
@@ -134,14 +134,14 @@
 								{formatCurrency(item.price?item.price.price:0)}
 							{/if}
 						</div>
-						<AddCart item={item} showCant="{true}"></AddCart>
-						{:else}
+						<AddCart fart={item} showCant="{true}"></AddCart>
+					{:else}
 							<div on:click={gotoLogin} data-dismiss="modal"  class="price net bold" style="cursor:pointer;">
 							<!-- <a href="/login" style="color:white" > -->
 								Entra para ver los precios
 							<!-- </a> -->
 							</div>
-						{/if}
+					{/if}
 					</div>
 					<div class="despcritions pl-4" >
 						<div class="mt-3 ">

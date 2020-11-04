@@ -14,13 +14,13 @@
 <div class="footer">
     <div class="container">
         <div class="row justify-content-end">
-		 <div class="col-xs-12 col-sm-6 col-md-4">
+		 <div class="col col-sm-3 col-md-3 col-xl-4 ">
 				<h3 >Políticas</h3>
 				<ul >
 					<li><a href="/cookies">Política de cookies</a></li>
 				</ul>
             </div>
-            <div class="col-xs-12 col-sm-6 col-md-4">
+            <div class="col col-sm-3 col-md-4 col-xl-4 ">
 				{#if $session.token}
 					<h3 >Mi cuenta</h3>
 					<ul >
@@ -38,7 +38,7 @@
 				{/if}
             </div>
 
-			<div class="col-xs-12 col-sm-6 col-md-5 col-xl-4 address">
+			<div class="col col-sm-6 col-md-5 col-xl-4 address">
 				{#if $session.info}
 						<h3>Dónde estamos</h3>
 						<div>

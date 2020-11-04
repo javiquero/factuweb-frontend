@@ -66,7 +66,7 @@
 	}
 
 	function handleKeydown(event) {
-		prevent(event);
+		// prevent(event);
 		if (event.key == "Enter"){
 			if ( selected == undefined ){
 				selected = items[0];

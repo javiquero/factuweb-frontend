@@ -1,6 +1,8 @@
 <script>
 	import { createEventDispatcher } from 'svelte';
 	const dispatch = createEventDispatcher();
+	import { fade } from 'svelte/transition';
+
 
 	export let show = false;
 	export let item = {};
@@ -76,6 +78,9 @@ function handleTouchMove(evt) {
 		background-repeat: no-repeat;
 		background-size: contain;
 		background-color:white;
+  transition-duration: .5s;
+  transition-timing-function: linear;
+
 		.return-button {
 			opacity: .5;
 			margin-left: 50px;
@@ -106,7 +111,7 @@ function handleTouchMove(evt) {
 <!-- <svelte:window on:touchstart={handleTouchStart} on:touchmove={handleTouchMove}/> -->
 <section >
 	{#if show}
-		<div id="big-image" style="background-image: url('/api/image/1024/{item.IMGART}')">
+		<div transition:fade id="big-image" style="background-image: url('/api/image/1024/{item.IMGART}')">
 			<button on:click={sendEventHide}  type="button" class="btn btn-dark return-button">Volver</button>
 
 			<button class="btn btn-light btn-block left-arrow" on:click={sendEventPrevious} role="button">

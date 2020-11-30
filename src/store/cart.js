@@ -16,7 +16,17 @@ function getCart() {
                 return data
             }
             catch (e) { }
-        },
+		},
+		finalize: async (payload) => {
+            try {
+				const data = await post("cart/finalize", payload);
+				set(data);
+                return data
+            }
+            catch (e) {
+                throw e
+            }
+		},
 		set: async (payload) => {
             try {
 				const data = await post("cart/set", payload);

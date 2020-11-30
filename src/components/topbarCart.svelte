@@ -57,6 +57,36 @@
 		</div>
 	</div>
 
+
+	<div class="modal fade" id="ModalFinaliceOrder" tabindex="-1" role="dialog" aria-labelledby="ModalFinaliceOrderTitle" aria-hidden="true">
+			<div class="modal-dialog modal-dialog-centered" role="document">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title" id="ModalFinaliceOrderTitle">
+							<svg style="width:30px; height:30px;" aria-hidden="true" focusable="false" data-prefix="fad" data-icon="exclamation-triangle" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512" class="svg-inline--fa fa-exclamation-triangle fa-w-18 fa-3x"><g class="fa-group"><path fill="#ccc" d="M569.52 440L329.58 24c-18.44-32-64.69-32-83.16 0L6.48 440c-18.42 31.94 4.64 72 41.57 72h479.89c36.87 0 60.06-40 41.58-72zM288 448a32 32 0 1 1 32-32 32 32 0 0 1-32 32zm38.24-238.41l-12.8 128A16 16 0 0 1 297.52 352h-19a16 16 0 0 1-15.92-14.41l-12.8-128A16 16 0 0 1 265.68 192h44.64a16 16 0 0 1 15.92 17.59z" class="fa-secondary"></path><path fill="white" d="M310.32 192h-44.64a16 16 0 0 0-15.92 17.59l12.8 128A16 16 0 0 0 278.48 352h19a16 16 0 0 0 15.92-14.41l12.8-128A16 16 0 0 0 310.32 192zM288 384a32 32 0 1 0 32 32 32 32 0 0 0-32-32z" class="fa-primary"></path></g></svg>
+							<span style="margin-left: 10px;margin-top: 5px; position: absolute;">Atención</span>
+						</h5>
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+					</div>
+					<div class="modal-body">
+						¿ Deseas dar por finalizado el pedido ?<br/>
+						<small>Esta acción es irreversible</small>
+						<div class="form-group mt-4">
+							<label for="exampleFormControlTextarea1">Si necesitas añadir algún comentario a tu pedido.</label>
+							<textarea bind:value={comentarios} class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+						</div>
+
+					</div>
+					<div class="modal-footer" style="border-top:none;">
+						<button type="button" class="btn btn-primary" data-dismiss="modal">Cancelar</button>
+						<button type="button" class="btn btn-success" data-dismiss="modal" on:click="{finishOrder}">Si, finalizar</button>
+					</div>
+				</div>
+			</div>
+		</div>
+
 {#if $cart.outOfCart}
 	<div class="modal fade" id="ModalRemoveFromCart" tabindex="-1" role="dialog" aria-labelledby="ModalRemoveFromCartTitle" aria-hidden="true">
 		<div class="modal-dialog modal-dialog-scrollable modal-lg modal-dialog-centered" role="document">
@@ -103,14 +133,24 @@
 {/if}
 <!-- </main> -->
 <script>
-import { cart } from "./../store/cart.js";
-import CartItem from "./cartItem.svelte";
-import { formatCurrency } from './../lib/functions'
-import { onMount } from 'svelte';
+	import { cart } from "./../store/cart.js";
+	import CartItem from "./cartItem.svelte";
+	import { formatCurrency } from './../lib/functions'
+	import { onMount } from 'svelte';
+	import { goto } from "@sapper/app";
+
+	let comentarios = '';
+	function finishOrder(){
+		cart.finalize({comments: comentarios});
+		comentarios = "";
+		return goto ('/private');
+	}
+
 
 onMount(async () => {
 	window.$("#ModalRemoveCart").appendTo("body");
 	window.$("#ModalRemoveFromCart").appendTo("body");
+	window.$("#ModalFinaliceOrder").appendTo("body");
 
 	window.$('.topbarcart').on('show.bs.dropdown', function (e) {
 		if ($cart.items.length>0){
